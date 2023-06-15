@@ -40,5 +40,5 @@ import yfinance as yf
 
 # print(refinedData)
 
-asianPaint = yf.Ticker("ASIANPAINT.BO").info
-pprint(asianPaint['currentPrice'])
+asianPaint = yf.Ticker("0P0000XVRM.BO")
+pprint(asianPaint)

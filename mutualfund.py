@@ -30,13 +30,17 @@ scheme_codes = mf.get_available_schemes('Nippon India')
 # obj = json.loads(scheme_codes)
 scheme_code_list = [x for x in scheme_codes]
 
-num1 = 1
-num2 = 5
-for x in scheme_code_list[num1:num2]:
-    data = mf.get_scheme_details(x)
-    print(data)
-    
+# num1 = 1
+# num2 = 5
+# for x in scheme_code_list[num1:num2]:
+#     data = mf.get_scheme_details(x)
+#     print(data)
+
+# mf.calculate_returns()
+
 # print("Nippon India Mutual Fund".split(" Mutual Fund"))
+
+# mf.calculate_returns()
 
 # Aditya Birla Sun Life Mutual Fund
 # Axis Mutual Fund
