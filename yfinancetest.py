@@ -5,8 +5,6 @@ import pandas as pd
 
 import yfinance as yf
 
-# yf.pdr_override()
-
 # tickers = pd.read_html('https://en.wikipedia.org/wiki/NIFTY_50', match="Company Name")
 # data = tickers[0].to_json(orient="records")
 
