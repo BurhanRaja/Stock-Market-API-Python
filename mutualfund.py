@@ -42,6 +42,8 @@ scheme_code_list = [x for x in scheme_codes]
 
 # mf.calculate_returns()
 
+
+
 # Aditya Birla Sun Life Mutual Fund
 # Axis Mutual Fund
 # Bandhan Mutual Fund

@@ -1,9 +1,10 @@
 import yfinance as yf
 import pandas as pd
 import json
-from pprint import pprint
 from yahooquery import Ticker
+from pprint import pprint
 
+# Stock List
 def handle_stock_list(exchange: str, limit: int, offset: int):
     if (exchange == "NSE"):
         tickers = pd.read_html('https://en.wikipedia.org/wiki/NIFTY_50', match="Company Name")
@@ -31,8 +32,6 @@ def handle_stock_list(exchange: str, limit: int, offset: int):
         objArr = json.loads(data)
         
         refinedData = []
-        
-        print(len(objArr))
 
         for el in objArr[limit:offset]:
             stock = yf.Ticker(el['Symbol']).info
@@ -48,56 +47,107 @@ def handle_stock_list(exchange: str, limit: int, offset: int):
             })
         return refinedData
 
-def handle_stock_details(symbol):
-    stock1 = yf.Ticker(symbol).info
-    stock2 = Ticker(symbol)
-    
-    
-    
-    return
+# Stock Financial Ratios
+def handle_stock_financial_ratios(symbol: str):
+    stock = yf.Ticker(symbol)
 
-data1 = Ticker('ASIANPAINT.NS')
-data2 = yf.Ticker("ASIANPAINT.NS")
-# pprint(json.loads(data1.balance_sheet().to_json(orient="records")))
-pprint(json.loads(data1.income_statement('a').to_json(orient="records")))
-# # pprint(Ticker('0P0000XVT7.BO').fund_performance)
+    financial = stock.info
+    financial_ratios = {
+        'profitability': {
+            'operating_margins': financial['operatingMargins'] * 100,
+            'profit_margins': financial['profitMargins'] * 100,
+            'return_on_assets': financial['returnOnAssets'] * 100,
+            'return_on_equity': financial['returnOnEquity'] * 100,
+        },
+        'operational': {
+            'current_ratio': financial['currentRatio'],
+            'quick_ratio': financial['quickRatio'],
+            'debt_to_equity': financial['debtToEquity']
+        },
+        'valuation': {
+            'pe_ratio': financial['trailingPE'],
+            'pb_ratio': financial['currentPrice'] / financial['bookValue'],
+            'ev_ebitda': (financial['currentPrice'] * financial['sharesOutstanding']) + financial['totalDebt'] - financial['totalCash'],
+            'dividend_yield': financial['trailingAnnualDividendYield']
+        }
+    }
+    return financial_ratios
 
-'''
-financial_ratios: 
-(yahoofinance)
-    Profitability
-        operatingMargins:
-        profitMargins(net profit margin):
-        returnOnAssets:
-        returnOnEquity:
-    Operational
-        currentRatio:
-        quickRatio:
-        debtToEquity:
-    Valuatuion
-        P/E: forwardPE
-        P/B: currentPrice / bookValue
-        EV / EBITDA: (currentPrice * sharesOutstanding) + totalDebt - totalCash
-        Dividend_Yield: trailingAnnualDividendYield
-'''
+# Stock Revenue Statement Graph
+def handle_stock_revenue_statement_graph(symbol: str, duration: str):
+    stock = Ticker(symbol)
+    incomeStmt = json.loads(stock.income_statement(duration).to_json(orient="records"))
+    revenue_statement = []
 
-'''
-Revenue Statement
-    TotalRevenue:
-    OperatingRevenue:
-    NetIncome:
-    OperatingIncome:
-'''
+    for istmt in incomeStmt:
+        revenue_statement.append({
+            'period_type': istmt['periodType'],
+            'as_of_date': pd.to_datetime(istmt['asOfDate'], unit='ms'),
+            'Total_revenue': istmt['TotalRevenue'],
+            'Net_income': istmt['NetIncome'],
+            'Operating_income': istmt['OperatingIncome']
+        })
+    return revenue_statement
 
-'''
-Cash Flow for graph (Yearly/ Quaterly)
-    OperatingCashFlow:
-    InvestingCashFlow:
-    FinancingCashFlow:
-'''
+# Stock Cash Flow Graph
+def handle_stock_cash_flow_graph(symbol: str, duration: str):
+    stock = Ticker(symbol)
+    cashflowStmt = json.loads(stock.cash_flow(duration).to_json(orient="records"))
 
-'''
-Balance_Sheet for graph (Yearly / Quaterly)
-    TotalAssets:
-    TotalDebt:
-'''
+    cashflow_statement = []
+
+    for cstmt in cashflowStmt:
+        cashflow_statement.append({
+            'operating_cash_flow': cstmt['OperatingCashFlow'],
+            'investing_cash_flow': cstmt['InvestingCashFlow'],
+            'financing_cash_flow': cstmt['FinancingCashFlow'],
+            'period_type': cstmt['periodType'],
+            'as_of_date': pd.to_datetime(cstmt['asOfDate'], unit='ms'),
+        })
+
+    return cashflow_statement
+
+# Stock Balance Sheet Graph
+def handle_stock_balance_sheet_graph(symbol: str, duration: str):
+    stock = Ticker(symbol)
+    balanceSheet = json.loads(stock.balance_sheet(duration).to_json(orient="records"))
+
+    balance_sheet = []
+
+    for bSheet in balanceSheet:
+        balance_sheet.append({
+            'total_assets': bSheet['TotalAssets'],
+            'total_debt': bSheet['TotalDebt'],
+            'period_type': bSheet['periodType'],
+            'as_of_date': pd.to_datetime(bSheet['asOfDate'], unit='ms'),
+        })
+
+    return balance_sheet
+
+def handle_stock_historical_data(symbol: str):
+    historical_data = json.loads(Ticker(symbol).history("5y", "1d").to_json(orient="records"))
+    return historical_data
+
+# Stock Info Profile
+def handle_stock_info_profile(symbol: str):
+    stock1 = Ticker(symbol)
+    stock2 = yf.Ticker(symbol)
+    return {
+        'assest_profile': stock1.asset_profile[symbol],
+        'info': stock2.info
+    }
+
+# Stock Balance Sheet
+def handle_stock_balance_sheet(symbol: str, duration: str):
+    stock = Ticker(symbol)
+    return stock.balance_sheet(duration)
+
+# Stock Cash Flow
+def handle_stock_cash_flow(symbol: str, duration: str):
+    stock = Ticker(symbol)
+    return stock.cash_flow(duration)
+
+# Stock Income Statement
+def handle_stock_income_statement(symbol: str, duration: str):
+    stock = Ticker(symbol)
+    return stock.income_statement(duration)
