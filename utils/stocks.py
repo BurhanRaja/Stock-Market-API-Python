@@ -15,8 +15,8 @@ def handle_stock_list(exchange: str, offset: int, limit: int):
 
         for el in objArr[offset:limit]:
             stock = yf.Ticker(el['Symbol'] + ".NS").info
-            current_gap_percentage = round(((stock['currentPrice'] - stock['regularMarketOpen']) / stock['currentPrice']) * 100, 2)
-            curr_gap = round(stock['currentPrice'] - stock['regularMarketOpen'], 2)
+            current_gap_percentage = round(((stock['currentPrice'] - stock['regularMarketPreviousClose']) / stock['currentPrice']) * 100, 2)
+            curr_gap = round(stock['currentPrice'] - stock['regularMarketPreviousClose'], 2)
             
             refinedData.append({
                 'company_name': el['Company Name'],
@@ -37,8 +37,8 @@ def handle_stock_list(exchange: str, offset: int, limit: int):
 
         for el in objArr[offset:limit]:
             stock = yf.Ticker(el['Symbol']).info
-            current_gap_percentage = round(((stock['currentPrice'] - stock['regularMarketOpen']) / stock['currentPrice']) * 100, 2)
-            curr_gap = round(stock['currentPrice'] - stock['regularMarketOpen'], 2)
+            current_gap_percentage = round(((stock['currentPrice'] - stock['regularMarketPreviousClose']) / stock['currentPrice']) * 100, 2)
+            curr_gap = round(stock['currentPrice'] - stock['regularMarketPreviousClose'], 2)
             
             refinedData.append({
                 'company_name': el['Companies'],
@@ -159,3 +159,15 @@ def handle_stock_income_statement(symbol: str, duration: str):
     stock = Ticker(symbol)
     incomestatement = json.loads(stock.income_statement(duration).to_json(orient="records"))
     return incomestatement
+
+def handle_stock_price(symbol: str):
+    stock = yf.Ticker(symbol).info
+    print(stock)
+    current_gap_percentage = ((stock['currentPrice'] - stock['regularMarketPreviousClose']) / stock['currentPrice']) * 100
+    curr_gap = round(stock['currentPrice'] - stock['regularMarketPreviousClose'], 2)
+
+    return {
+        'curr_price': stock['currentPrice'],
+        'curr_gap' : curr_gap,
+        'curr_gap_percentage': current_gap_percentage
+    }
