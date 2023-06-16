@@ -5,7 +5,7 @@ from yahooquery import Ticker
 from pprint import pprint
 
 # Stock List
-def handle_stock_list(exchange: str, limit: int, offset: int):
+def handle_stock_list(exchange: str, offset: int, limit: int):
     if (exchange == "NSE"):
         tickers = pd.read_html('https://en.wikipedia.org/wiki/NIFTY_50', match="Company Name")
         data = tickers[0].to_json(orient="records")
@@ -13,7 +13,7 @@ def handle_stock_list(exchange: str, limit: int, offset: int):
 
         refinedData = []
 
-        for el in objArr[limit:offset]:
+        for el in objArr[offset:limit]:
             stock = yf.Ticker(el['Symbol'] + ".NS").info
             current_gap_percentage = round(((stock['currentPrice'] - stock['regularMarketOpen']) / stock['currentPrice']) * 100, 2)
             curr_gap = round(stock['currentPrice'] - stock['regularMarketOpen'], 2)
@@ -22,9 +22,11 @@ def handle_stock_list(exchange: str, limit: int, offset: int):
                 'company_name': el['Company Name'],
                 'symbol': el['Symbol'] + ".NS",
                 'sector': el['Sector[18]'],
+                "price": stock['currentPrice'],
                 'curr_per': current_gap_percentage,
                 'curr_gap': curr_gap
             })
+
         return refinedData
     else:
         tickers = pd.read_html('https://en.wikipedia.org/wiki/BSE_SENSEX', match="ticker Number")
@@ -33,7 +35,7 @@ def handle_stock_list(exchange: str, limit: int, offset: int):
         
         refinedData = []
 
-        for el in objArr[limit:offset]:
+        for el in objArr[offset:limit]:
             stock = yf.Ticker(el['Symbol']).info
             current_gap_percentage = round(((stock['currentPrice'] - stock['regularMarketOpen']) / stock['currentPrice']) * 100, 2)
             curr_gap = round(stock['currentPrice'] - stock['regularMarketOpen'], 2)
@@ -42,6 +44,7 @@ def handle_stock_list(exchange: str, limit: int, offset: int):
                 'company_name': el['Companies'],
                 'symbol': el['Symbol'],
                 'sector': el['Sector'],
+                'price': stock['currentPrice'],
                 'curr_per': current_gap_percentage,
                 'curr_gap': curr_gap
             })
@@ -49,9 +52,11 @@ def handle_stock_list(exchange: str, limit: int, offset: int):
 
 # Stock Financial Ratios
 def handle_stock_financial_ratios(symbol: str):
-    stock = yf.Ticker(symbol)
+    financial = yf.Ticker(symbol).info
+    debtEquity = 'N/A'
+    if 'debtToEquity' in financial:
+        debtEquity = financial['debtToEquity']
 
-    financial = stock.info
     financial_ratios = {
         'profitability': {
             'operating_margins': financial['operatingMargins'] * 100,
@@ -62,7 +67,7 @@ def handle_stock_financial_ratios(symbol: str):
         'operational': {
             'current_ratio': financial['currentRatio'],
             'quick_ratio': financial['quickRatio'],
-            'debt_to_equity': financial['debtToEquity']
+            'debt_to_equity': debtEquity
         },
         'valuation': {
             'pe_ratio': financial['trailingPE'],
@@ -97,13 +102,14 @@ def handle_stock_cash_flow_graph(symbol: str, duration: str):
     cashflow_statement = []
 
     for cstmt in cashflowStmt:
-        cashflow_statement.append({
-            'operating_cash_flow': cstmt['OperatingCashFlow'],
-            'investing_cash_flow': cstmt['InvestingCashFlow'],
-            'financing_cash_flow': cstmt['FinancingCashFlow'],
-            'period_type': cstmt['periodType'],
-            'as_of_date': pd.to_datetime(cstmt['asOfDate'], unit='ms'),
-        })
+        if (cstmt['OperatingCashFlow'] != None and cstmt['InvestingCashFlow'] != None and cstmt['FinancingCashFlow'] != None):
+            cashflow_statement.append({
+                'operating_cash_flow': cstmt['OperatingCashFlow'],
+                'investing_cash_flow': cstmt['InvestingCashFlow'],
+                'financing_cash_flow': cstmt['FinancingCashFlow'],
+                'period_type': cstmt['periodType'],
+                'as_of_date': pd.to_datetime(cstmt['asOfDate'], unit='ms'),
+            })
 
     return cashflow_statement
 
@@ -124,30 +130,32 @@ def handle_stock_balance_sheet_graph(symbol: str, duration: str):
 
     return balance_sheet
 
+# Stock Historical Data
 def handle_stock_historical_data(symbol: str):
     historical_data = json.loads(Ticker(symbol).history("5y", "1d").to_json(orient="records"))
     return historical_data
 
 # Stock Info Profile
 def handle_stock_info_profile(symbol: str):
-    stock1 = Ticker(symbol)
-    stock2 = yf.Ticker(symbol)
+    stock = yf.Ticker(symbol)
     return {
-        'assest_profile': stock1.asset_profile[symbol],
-        'info': stock2.info
+        'info': stock.info
     }
 
 # Stock Balance Sheet
 def handle_stock_balance_sheet(symbol: str, duration: str):
     stock = Ticker(symbol)
-    return stock.balance_sheet(duration)
+    balancesheet = json.loads(stock.balance_sheet(duration).to_json(orient="records"))
+    return balancesheet
 
 # Stock Cash Flow
 def handle_stock_cash_flow(symbol: str, duration: str):
     stock = Ticker(symbol)
-    return stock.cash_flow(duration)
+    cashflow = json.loads(stock.cash_flow(duration).to_json(orient="records"))
+    return cashflow
 
 # Stock Income Statement
 def handle_stock_income_statement(symbol: str, duration: str):
     stock = Ticker(symbol)
-    return stock.income_statement(duration)
+    incomestatement = json.loads(stock.income_statement(duration).to_json(orient="records"))
+    return incomestatement
