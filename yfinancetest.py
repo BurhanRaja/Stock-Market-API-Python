@@ -1,4 +1,3 @@
-from pandas_datareader import data as pdr
 from pprint import pprint
 import json
 import pandas as pd
@@ -40,5 +39,5 @@ import yfinance as yf
 
 # print(refinedData)
 
-asianPaint = yf.Ticker("0P0000XVRM.BO")
+asianPaint = yf.Ticker("ASIANPAINT.NS").info
 pprint(asianPaint)
