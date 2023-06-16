@@ -162,7 +162,6 @@ def handle_stock_income_statement(symbol: str, duration: str):
 
 def handle_stock_price(symbol: str):
     stock = yf.Ticker(symbol).info
-    print(stock)
     current_gap_percentage = ((stock['currentPrice'] - stock['regularMarketPreviousClose']) / stock['currentPrice']) * 100
     curr_gap = round(stock['currentPrice'] - stock['regularMarketPreviousClose'], 2)
 
