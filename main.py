@@ -9,6 +9,10 @@
 
 from fastapi import FastAPI
 from utils.stocks import *
+from financedatabase import Funds
+from mftool import Mftool
+
+mf = Mftool()
 
 app = FastAPI()
 
@@ -99,6 +103,3 @@ def read_income_statement(stock: str, duration: str):
     else:
         stock_incomestatement = handle_stock_income_statement(stock, 'q')
     return stock_incomestatement
-
-if __name__ == "__main__":
-    import uvicorn

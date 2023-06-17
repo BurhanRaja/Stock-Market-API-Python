@@ -3,12 +3,19 @@ from pprint import pprint
 import json
 import numpy as np
 from array import array
+from financedatabase import Funds
+
+funds = Funds()
+
+# pprint(funds.search())
 
 mf = Mftool()
 
-# scheme_codes = mf.get_scheme_codes(as_json=True)
+scheme_codes = mf.get_scheme_codes(as_json=True)
 
-# obj = json.loads(scheme_codes)
+obj = json.loads(scheme_codes)
+
+pprint(obj)
 # scheme_code_list = np.array([x for x in obj])
 
 # print(len(obj))
