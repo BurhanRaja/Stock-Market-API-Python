@@ -131,8 +131,8 @@ def handle_stock_balance_sheet_graph(symbol: str, duration: str):
     return balance_sheet
 
 # Stock Historical Data
-def handle_stock_historical_data(symbol: str):
-    historical_data = json.loads(Ticker(symbol).history("5y", "1d").to_json(orient="records"))
+def handle_stock_historical_data(symbol: str, period: str, interval: str):
+    historical_data = json.loads(Ticker(symbol).history(period, interval).to_json(orient="table"))['data']
     return historical_data
 
 # Stock Info Profile

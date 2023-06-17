@@ -67,8 +67,8 @@ def read_cash_flow_graph(stock: str, duration: str):
 
 # Stock Historical Data
 @app.get("/stock/historical/data/{stock}")
-def read_historical_data(stock: str):
-    stock_historical_data = handle_stock_historical_data(stock)
+def read_historical_data(stock: str, period: str, interval: str):
+    stock_historical_data = handle_stock_historical_data(stock, period, interval)
     return stock_historical_data
 
 # Stock Information
