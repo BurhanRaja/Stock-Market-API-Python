@@ -123,7 +123,7 @@ def moitilal_mutual_fund(skip: int, limit: int):
 
 # Get Mahindra Manulife Mutual Fund
 def mahindra_manulife_mutual_fund(skip: int, limit: int):
-    with open('./data/Mahindra_Manlife.json') as file:
+    with open('./data/Mahindra_Manulife.json') as file:
         json_data = json.load(file)
     
         return {
@@ -301,7 +301,7 @@ def best_tax_saver_mutual_fund(skip: int, limit: int):
 def mutualfund_history(mf_id: str, duration: str):
     history_data = mf.history(mf_id,start=None,end=None,period=duration,as_dataframe=True)
     
-    return json.loads(history_data.to_json(orient="table"))
+    return json.loads(history_data.to_json(orient="table"))['data']
 
 # Mutual Fund Details
 def mutualfund_info(mf_id: str):

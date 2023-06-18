@@ -6,7 +6,7 @@ app = FastAPI()
 
 @app.get("/")
 def read_root():
-    return {"Hello": "World"}
+    return {"message": "Stock Market API"}
 
 # ------------------------------------ STOCKS -------------------------------------------
 
@@ -99,160 +99,162 @@ def read_income_statement(stock: str, duration: str):
 
 # Get All Mutual Fund
 @app.get("/mutualfund/all")
-def read_all_mf(skip: int, limit: int):
+def read_all_mf(skip: int=0, limit: int=10):
     data = all_mutual_fund(skip, limit)
     return data
 
 # Get UTI Mutual Fund
 @app.get("/mutualfund/uti")
-def read_uti_mf(skip: int, limit: int):
+def read_uti_mf(skip: int=0, limit: int=10):
     data = uti_mutual_fund(skip, limit)
     return data
 
 # Get Union Mutual Fund
 @app.get("/mutualfund/union")
-def read_union_mf(skip: int, limit: int):
+def read_union_mf(skip: int=0, limit: int=10):
     data = union_mutual_fund(skip, limit)
     return data
 
 # Get Tata Mutual Fund
 @app.get("/mutualfund/tata")
-def read_tata_mf(skip: int, limit: int):
+def read_tata_mf(skip: int=0, limit: int=10):
     data = tata_mutual_fund(skip, limit)
     return data
 
 # Get SBI Mutual Fund
 @app.get("/mutualfund/sbi")
-def read_sbi_mf(skip: int, limit: int):
+def read_sbi_mf(skip: int=0, limit: int=10):
     data = sbi_mutual_fund(skip, limit)
     return data
 
 # Get Reliance Mutual Fund
 @app.get("/mutualfund/reliance")
-def read_reliance_mf(skip: int, limit: int):
+def read_reliance_mf(skip: int=0, limit: int=10):
     data = reliance_mutual_fund(skip, limit)
     return data
 
 # Get Nippon Mutual Fund
 @app.get("/mutualfund/nippon")
-def read_nippon_mf(skip: int, limit: int):
+def read_nippon_mf(skip: int=0, limit: int=10):
     data = nippon_mutual_fund(skip, limit)
     return data
 
 # Get Navi Mutual Fund
 @app.get("/mutualfund/navi")
-def read_navi_mf(skip: int, limit: int):
+def read_navi_mf(skip: int=0, limit: int=10):
     data = navi_mutual_fund(skip, limit)
     return data
 
 # Get Motilal Mutual Fund
 @app.get("/mutualfund/moitilal")
-def read_moitilal_mf(skip: int, limit: int):
+def read_moitilal_mf(skip: int=0, limit: int=10):
     data = moitilal_mutual_fund(skip, limit)
     return data
 
 # Get Mahindra-Manulife Mutual Fund
 @app.get("/mutualfund/mahindra-manulife")
-def read_mahindra_manulife_mf(skip: int, limit: int):
+def read_mahindra_manulife_mf(skip: int=0, limit: int=10):
     data = mahindra_manulife_mutual_fund(skip, limit)
     return data
 
 # Get LIC Mutual Fund
 @app.get("/mutualfund/lic")
-def read_lic_mf(skip: int, limit: int):
+def read_lic_mf(skip: int=0, limit: int=10):
     data = lic_mutual_fund(skip, limit)
     return data
 
 # Get Kotak Mutual Fund
 @app.get("/mutualfund/kotak")
-def read_kotak_mf(skip: int, limit: int):
+def read_kotak_mf(skip: int=0, limit: int=10):
     data = kotak_mutual_fund(skip, limit)
     return data
 
 # Get IDFC Mutual Fund
 @app.get("/mutualfund/idfc")
-def read_idfc_mf(skip: int, limit: int):
+def read_idfc_mf(skip: int=0, limit: int=10):
     data = idfc_mutual_fund(skip, limit)
     return data
 
 # Get IDBI Mutual Fund
 @app.get("/mutualfund/idbi")
-def read_idbi_mf(skip: int, limit: int):
+def read_idbi_mf(skip: int=0, limit: int=10):
     data = idbi_mutual_fund(skip, limit)
     return data
 
 # Get ICICI Mutual Fund
 @app.get("/mutualfund/icici")
-def read_icici_mf(skip: int, limit: int):
+def read_icici_mf(skip: int=0, limit: int=10):
     data = icici_mutual_fund(skip, limit)
     return data
 
 # Get HSBC Mutual Fund
 @app.get("/mutualfund/hsbc")
-def read_hsbc_mf(skip: int, limit: int):
+def read_hsbc_mf(skip: int=0, limit: int=10):
     data = hsbc_mutual_fund(skip, limit)
     return data
 
 # Get HDFC Mutual Fund
 @app.get("/mutualfund/hdfc")
-def read_hdfc_mf(skip: int, limit: int):
+def read_hdfc_mf(skip: int=0, limit: int=10):
     data = hdfc_mutual_fund(skip, limit)
     return data
 
 # Get Franklin Mutual Fund
 @app.get("/mutualfund/franklin")
-def read_franklin_mf(skip: int, limit: int):
+def read_franklin_mf(skip: int=0, limit: int=10):
     data = franklin_mutual_fund(skip, limit)
     return data
 
 # Get Axis Mutual Fund
 @app.get("/mutualfund/axis")
-def read_axis_mf(skip: int, limit: int):
+def read_axis_mf(skip: int=0, limit: int=10):
     data = axis_mutual_fund(skip, limit)
     return data
 
 # Get Aditya-Birla Mutual Fund
 @app.get("/mutualfund/aditya-birla")
-def read_aditya_birla_mf(skip: int, limit: int):
+def read_aditya_birla_mf(skip: int=0, limit: int=10):
     data = aditya_birla_mutual_fund(skip, limit)
     return data
 
 # Get Best Debt Mutual Fund
 @app.get("/mutualfund/best-debt")
-def read_best_debt_mf(skip: int, limit: int):
+def read_best_debt_mf(skip: int=0, limit: int=10):
     data = best_debt_mutual_fund(skip, limit)
     return data
 
 # Get Best Long Duration Mutual Fund
 @app.get("/mutualfund/best-long-duration")
-def read_best_long_duration_mf(skip: int, limit: int):
+def read_best_long_duration_mf(skip: int=0, limit: int=10):
     data = best_long_duration_mutual_fund(skip, limit)
     return data
 
 # Get Best Returns Mutual Fund
 @app.get("/mutualfund/best-returns")
-def read_best_returns_mf(skip: int, limit: int):
+def read_best_returns_mf(skip: int=0, limit: int=10):
     data = best_returns_mutual_fund(skip, limit)
     return data
 
 # Get Best Equity Mutual Fund
 @app.get("/mutualfund/best-equity")
-def read_best_equity_mf(skip: int, limit: int):
+def read_best_equity_mf(skip: int=0, limit: int=10):
     data = best_equity_mutual_fund(skip, limit)
     return data
 
 # Get Best Tax Saver Mutual Fund
 @app.get("/mutualfund/best-tax-saver")
-def read_best_tax_saver_mf(skip: int, limit: int):
+def read_best_tax_saver_mf(skip: int=0, limit: int=10):
     data = best_tax_saver_mutual_fund(skip, limit)
     return data
 
+# Get Mutual Fund History
 @app.get("/mutualfund/history/{mf}")
 def read_mutual_fund_history(mf: str, duration: str):
     history_data = mutualfund_history(mf, duration)
     return history_data
 
+# Get Mutual Fund Details
 @app.get("/mutualfund/details/{mf}")
 def read_mutual_fund_history(mf: str):
-    history_data = mutualfund_info(mf)
-    return history_data
+    data = mutualfund_info(mf)
+    return data

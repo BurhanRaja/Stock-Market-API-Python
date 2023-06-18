@@ -2,6 +2,7 @@ import yfinance as yf
 import pandas as pd
 import json
 from yahooquery import Ticker
+from pprint import pprint
 
 # Stock List
 def handle_stock_list(exchange: str, offset: int, limit: int):
@@ -52,27 +53,26 @@ def handle_stock_list(exchange: str, offset: int, limit: int):
 # Stock Financial Ratios
 def handle_stock_financial_ratios(symbol: str):
     financial = yf.Ticker(symbol).info
-    debtEquity = 'N/A'
-    if 'debtToEquity' in financial:
-        debtEquity = financial['debtToEquity']
+        
+    pprint(financial)
 
     financial_ratios = {
         'profitability': {
-            'operating_margins': financial['operatingMargins'] * 100,
-            'profit_margins': financial['profitMargins'] * 100,
-            'return_on_assets': financial['returnOnAssets'] * 100,
-            'return_on_equity': financial['returnOnEquity'] * 100,
+            'operating_margins': financial.get('operatingMargins', 0) * 100,
+            'profit_margins': financial.get('profitMargins', 0) * 100,
+            'return_on_assets': financial.get('returnOnAssets', 0) * 100,
+            'return_on_equity': financial.get('returnOnEquity', 0) * 100,
         },
         'operational': {
-            'current_ratio': financial['currentRatio'],
-            'quick_ratio': financial['quickRatio'],
-            'debt_to_equity': debtEquity
+            'current_ratio': financial.get('currentRatio', 'N/A'),
+            'quick_ratio': financial.get('quickRatio', 'N/A'),
+            'debt_to_equity': financial.get('debtToEquity', 'N/A')
         },
         'valuation': {
-            'pe_ratio': financial['trailingPE'],
-            'pb_ratio': financial['currentPrice'] / financial['bookValue'],
-            'ev_ebitda': (financial['currentPrice'] * financial['sharesOutstanding']) + financial['totalDebt'] - financial['totalCash'],
-            'dividend_yield': financial['trailingAnnualDividendYield']
+            'pe_ratio': financial.get('trailingPE', 'N/A'),
+            'pb_ratio': financial.get('currentPrice', 0) / financial.get('bookValue', 0),
+            'ev_ebitda': (financial.get('currentPrice', 0) * financial.get('sharesOutstanding', 0)) + financial.get('totalDebt', 0) - financial.get('totalCash', 0),
+            'dividend_yield': financial.get('trailingAnnualDividendYield', 'N/A')
         }
     }
     return financial_ratios
@@ -85,11 +85,11 @@ def handle_stock_revenue_statement_graph(symbol: str, duration: str):
 
     for istmt in incomeStmt:
         revenue_statement.append({
-            'period_type': istmt['periodType'],
-            'as_of_date': pd.to_datetime(istmt['asOfDate'], unit='ms'),
-            'Total_revenue': istmt['TotalRevenue'],
-            'Net_income': istmt['NetIncome'],
-            'Operating_income': istmt['OperatingIncome']
+            'period_type': istmt.get('periodType', 'N/A'),
+            'as_of_date': pd.to_datetime(istmt.get('asOfDate', 0), unit='ms'),
+            'Total_revenue': istmt.get('TotalRevenue', 0),
+            'Net_income': istmt.get('NetIncome', 0),
+            'Operating_income': istmt.get('OperatingIncome', 0)
         })
     return revenue_statement
 
@@ -103,11 +103,11 @@ def handle_stock_cash_flow_graph(symbol: str, duration: str):
     for cstmt in cashflowStmt:
         if (cstmt['OperatingCashFlow'] != None and cstmt['InvestingCashFlow'] != None and cstmt['FinancingCashFlow'] != None):
             cashflow_statement.append({
-                'operating_cash_flow': cstmt['OperatingCashFlow'],
-                'investing_cash_flow': cstmt['InvestingCashFlow'],
-                'financing_cash_flow': cstmt['FinancingCashFlow'],
-                'period_type': cstmt['periodType'],
-                'as_of_date': pd.to_datetime(cstmt['asOfDate'], unit='ms'),
+                'operating_cash_flow': cstmt.get('OperatingCashFlow', 0),
+                'investing_cash_flow': cstmt.get('InvestingCashFlow', 0),
+                'financing_cash_flow': cstmt.get('FinancingCashFlow', 0),
+                'period_type': cstmt.get('periodType', 0),
+                'as_of_date': pd.to_datetime(cstmt.get('asOfDate', 0), unit='ms'),
             })
 
     return cashflow_statement
@@ -121,10 +121,10 @@ def handle_stock_balance_sheet_graph(symbol: str, duration: str):
 
     for bSheet in balanceSheet:
         balance_sheet.append({
-            'total_assets': bSheet['TotalAssets'],
-            'total_debt': bSheet['TotalDebt'],
-            'period_type': bSheet['periodType'],
-            'as_of_date': pd.to_datetime(bSheet['asOfDate'], unit='ms'),
+            'total_assets': bSheet.get('TotalAssets', 0),
+            'total_debt': bSheet.get('TotalDebt', 0),
+            'period_type': bSheet.get('periodType', 0),
+            'as_of_date': pd.to_datetime(bSheet.get('asOfDate', 0), unit='ms'),
         })
 
     return balance_sheet
