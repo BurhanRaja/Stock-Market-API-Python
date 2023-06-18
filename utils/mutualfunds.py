@@ -1,8 +1,6 @@
 from mftool import Mftool
-from pprint import pprint
 import json
 import yahooquery as yq
-from yfinance import Ticker
 
 mf = Mftool()
 

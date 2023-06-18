@@ -1,10 +1,6 @@
 from fastapi import FastAPI
 from utils.stocks import *
 from utils.mutualfunds import *
-from financedatabase import Funds
-from mftool import Mftool
-
-mf = Mftool()
 
 app = FastAPI()
 

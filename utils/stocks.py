@@ -2,7 +2,6 @@ import yfinance as yf
 import pandas as pd
 import json
 from yahooquery import Ticker
-from pprint import pprint
 
 # Stock List
 def handle_stock_list(exchange: str, offset: int, limit: int):
