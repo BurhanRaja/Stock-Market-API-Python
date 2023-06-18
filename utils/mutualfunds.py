@@ -8,34 +8,6 @@ mf = Mftool()
 
 refinedArray=[]
 
-# def find_values_with_word(data, word):
-#     if isinstance(data, dict):
-#         for key, value in data.items():
-#             if isinstance(value, (dict, list)):
-#                 find_values_with_word(value, word)
-#             elif isinstance(value, str) and word in value:
-#                 performace = yq.Ticker(key+".BO").fund_performance[key+".BO"]
-#                 refinedArray.append({
-#                     "symbol": key,
-#                     "fund": value,
-#                     "return_one_year": float(performace['trailingReturns']['oneYear']) * 100, 
-#                     "return_five_year": float(performace['trailingReturns']['fiveYear']) * 100, 
-#                 })
-#         with open("./data/Union.json", "w") as write_file:
-#             json.dump(refinedArray, write_file)
-#     elif isinstance(data, list):
-#         for item in data:
-#             find_values_with_word(item, word)
-
-# Load JSON data from a file
-# with open('./data/code.json') as file:
-#     json_data = json.load(file)
-
-# Specify the word you're looking for
-# search_word = "Union"
-
-# find_values_with_word(json_data, search_word)
-
 def traverse_mutual_fund_all(data, skip: int=None, limit: int=None):
     if isinstance(data, dict):
         for key, value in data.items():
@@ -71,7 +43,7 @@ def uti_mutual_fund(skip: int, limit: int):
     return {
         "data": json_data[skip:limit],
         "total_pages": int(len(json_data) / 10),
-        "page_num": skip / 10
+        "page_num": limit / 10
     }
 
 # Get Union Mutual Fund
@@ -306,7 +278,7 @@ def best_long_duration_mutual_fund(skip: int, limit: int):
     }
 
 # Get Best Returns Fund
-def best_long_duration_mutual_fund(skip: int, limit: int):
+def best_returns_mutual_fund(skip: int, limit: int):
     with open('./data/Best_Returns_Funds.json') as file:
         json_data = json.load(file)
     
@@ -325,4 +297,27 @@ def best_tax_saver_mutual_fund(skip: int, limit: int):
         "data": json_data[skip:limit],
         "total_pages": int(len(json_data) / 10),
         "page_num": int(limit / 10)
+    }
+        
+# Mutual Fund History 
+def mutualfund_history(mf_id: str, duration: str):
+    history_data = mf.history(mf_id,start=None,end=None,period=duration,as_dataframe=True)
+    
+    return json.loads(history_data.to_json(orient="table"))
+
+# Mutual Fund Details
+def mutualfund_info(mf_id: str):
+    info_data = json.loads(mf.get_scheme_info(mf_id))
+    performance = yq.Ticker(mf_id+".BO").fund_performance
+    ownership = json.loads(yq.Ticker(mf_id+".BO").fund_ownership.to_json(orient="records"))
+    bondHoldings = yq.Ticker(mf_id+".BO").fund_bond_holdings
+    equityHoldings = yq.Ticker(mf_id+".BO").fund_equity_holdings
+    holdingInfo = yq.Ticker(mf_id+".BO").fund_holding_info
+    return {
+        "info": info_data,
+        "ownership": ownership,
+        "performance": performance[mf_id+".BO"],
+        "holding_info": holdingInfo[mf_id+".BO"],
+        "bond_holdings": bondHoldings[mf_id+".BO"],
+        "equity_holdings": equityHoldings,
     }
