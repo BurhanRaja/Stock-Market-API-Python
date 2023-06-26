@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from utils.stocks import *
 from utils.mutualfunds import *
+from utils.etf import *
 
 app = FastAPI()
 
@@ -257,4 +258,16 @@ def read_mutual_fund_history(mf: str, duration: str):
 @app.get("/mutualfund/details/{mf}")
 def read_mutual_fund_history(mf: str):
     data = mutualfund_info(mf)
+    return data
+
+# ------------------------------------------ ETFs ---------------------------------------------
+
+@app.get("/all/etfs")
+def read_etfs(skip: int = 1, limit: int = 10):
+    data = all_etfs(skip, limit)
+    return data
+
+@app.get("/etfs/{etf}")
+def read_single_etf(etf: str):
+    data = singleETFs(etf)
     return data
