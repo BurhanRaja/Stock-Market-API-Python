@@ -271,3 +271,23 @@ def read_etfs(skip: int = 1, limit: int = 10):
 def read_single_etf(etf: str):
     data = singleETFs(etf)
     return data
+
+@app.get("/etf/best-bond-etf")
+def read_best_bond_etf():
+    data = best_bond_etf()
+    return data
+
+@app.get("/etf/best-index-etf")
+def read_best_index_etf():
+    data = best_index_etf()
+    return data
+
+@app.get("/etf/best-gold-etf")
+def read_best_gold_etf():
+    data = best_gold_etf()
+    return data
+
+@app.get("/etf/best-sector-etf")
+def read_best_sector_etf():
+    data = best_sector_etf()
+    return data
