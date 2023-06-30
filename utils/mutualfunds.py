@@ -1,6 +1,9 @@
 from mftool import Mftool
 import json
 import yahooquery as yq
+import yfinance as yf
+from pprint import pprint
+from yahoo_fin import yaf
 
 mf = Mftool()
 
@@ -319,3 +322,5 @@ def mutualfund_info(mf_id: str):
         "bond_holdings": bondHoldings[mf_id+".BO"],
         "equity_holdings": equityHoldings,
     }
+
+pprint(yaf.stock_info)

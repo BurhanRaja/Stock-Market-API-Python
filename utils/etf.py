@@ -3,6 +3,7 @@ from pprint import pprint
 from yahooquery import Ticker
 import yfinance as yf
 import pandas as pd
+# from yahoofinancials import YahooFinancials
 from yahoofinancials import YahooFinancials
 
 refinedArray = []
