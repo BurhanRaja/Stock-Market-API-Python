@@ -3,7 +3,8 @@ import json
 import yahooquery as yq
 import yfinance as yf
 from pprint import pprint
-from yahoo_fin import yaf
+from yahoofinancials import YahooFinancials
+from pprint import pprint
 
 mf = Mftool()
 
@@ -323,4 +324,9 @@ def mutualfund_info(mf_id: str):
         "equity_holdings": equityHoldings,
     }
 
-pprint(yaf.stock_info)
+def mutualFundCurrentPrice(symbol: str):
+    return {
+        "curr_price" : YahooFinancials(symbol + ".BO").get_current_price(),
+        "curr_per_change": YahooFinancials(symbol + ".BO").get_current_percent_change(),
+        "curr_change": YahooFinancials(symbol + ".BO").get_current_change(),
+    }
