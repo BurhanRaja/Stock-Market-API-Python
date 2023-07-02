@@ -2,8 +2,6 @@ import json
 from pprint import pprint
 from yahooquery import Ticker
 import yfinance as yf
-import pandas as pd
-# from yahoofinancials import YahooFinancials
 from yahoofinancials import YahooFinancials
 
 refinedArray = []
@@ -134,3 +132,20 @@ def etfCurrentPrice(symbol: str):
         "curr_per_change": YahooFinancials(symbol).get_current_percent_change(),
         "curr_change": YahooFinancials(symbol).get_current_change(),
     }
+
+def etfDetails(symbol: str):
+    info = yf.Ticker("UTIBANKETF.NS").info
+    curr_price = YahooFinancials("UTIBANKETF.NS").get_current_price()
+    per_change = YahooFinancials("UTIBANKETF.NS").get_current_percent_change()
+    curr_change = YahooFinancials("UTIBANKETF.NS").get_current_change()
+    
+    return {
+        "info": info,
+        "curr_price": curr_price,
+        "curr_change": curr_change,
+        "per_change": per_change
+    }
+
+def etfHistoricalData(symbol: str, period: str, interval: str): 
+    historical_data = json.loads(Ticker(symbol).history(period, interval).to_json(orient="table"))['data']
+    return historical_data
