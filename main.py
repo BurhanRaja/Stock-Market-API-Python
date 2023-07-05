@@ -269,8 +269,8 @@ def read_mutual_fund_price(symbol: str):
 # ------------------------------------------ ETFs ---------------------------------------------
 
 @app.get("/all/etfs")
-async def read_etfs(skip: int = 1, limit: int = 10):
-    data = await all_etfs(skip, limit)
+def read_etfs(skip: int = 1, limit: int = 6):
+    data = all_etfs(skip, limit)
     return data
 
 @app.get("/etfs/{etf}")
@@ -301,4 +301,14 @@ def read_best_sector_etf():
 @app.get("/etf/current/price/{symbol}")
 def read_etf_price(symbol: str):
     data = etfCurrentPrice(symbol)
+    return data
+
+@app.get("/etf/details/{symbol}")
+def read_etf_details(symbol: str):
+    data = etfDetails(symbol)
+    return data
+
+@app.get("/etf/historical-data/{symbol}")
+def read_etf_historical_data(symbol: str, period: str = "ytd", interval: str = "1mo"):
+    data = etfHistoricalData(symbol, period, interval)
     return data

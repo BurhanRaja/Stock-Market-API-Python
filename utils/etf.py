@@ -3,10 +3,11 @@ from pprint import pprint
 from yahooquery import Ticker
 import yfinance as yf
 from yahoofinancials import YahooFinancials
+import requests
 
 refinedArray = []
 
-def all_etfs(skip: int = 1, limit: int = 10):
+def all_etfs(skip: int = 1, limit: int = 6):
 
     with open('./data/all_ETFs.json', "r") as write_file:
         objArr = json.load(write_file)
@@ -15,11 +16,10 @@ def all_etfs(skip: int = 1, limit: int = 10):
 
     for ticker in objArr[skip:limit]:
         sybmol = ticker['1'] + ".NS"
-        price = YahooFinancials(ticker['1'] + ".NS").get_current_price()
         dataArr.append({
             "name": ticker['0'],
             "symbol": sybmol,
-            "price": price
+            "price": YahooFinancials(ticker['1'] + ".NS", concurrent=True).get_current_price()
         })
     
     return dataArr
@@ -27,19 +27,19 @@ def all_etfs(skip: int = 1, limit: int = 10):
 def singleETFs(symbol: str):
     if '.NS' in symbol:
         data = yf.Ticker(symbol).info
-        price = YahooFinancials(symbol).get_current_price()
-        curr_change = YahooFinancials(symbol).get_current_change()
-        per_change = YahooFinancials(symbol).get_current_percent_change()
+        price = YahooFinancials(symbol, concurrent=True).get_current_price()
+        curr_change = YahooFinancials(symbol, concurrent=True).get_current_change()
+        per_change = YahooFinancials(symbol, concurrent=True).get_current_percent_change()
     if '.BO' in symbol:
         data = yf.Ticker(symbol).info
-        price = YahooFinancials(symbol).get_current_price()
-        curr_change = YahooFinancials(symbol).get_current_change()
-        per_change = YahooFinancials(symbol).get_current_percent_change()
+        price = YahooFinancials(symbol, concurrent=True).get_current_price()
+        curr_change = YahooFinancials(symbol, concurrent=True).get_current_change()
+        per_change = YahooFinancials(symbol, concurrent=True).get_current_percent_change()
     if '.NS' not in symbol:
         data = yf.Ticker(symbol + ".NS").info
-        price = YahooFinancials(symbol + ".NS").get_current_price()
-        curr_change = YahooFinancials(symbol + ".NS").get_current_change()
-        per_change = YahooFinancials(symbol + ".NS").get_current_percent_change()
+        price = YahooFinancials(symbol + ".NS", concurrent=True).get_current_price()
+        curr_change = YahooFinancials(symbol + ".NS", concurrent=True).get_current_change()
+        per_change = YahooFinancials(symbol + ".NS", concurrent=True).get_current_percent_change()
 
     sData = {
         "price": price,
@@ -55,9 +55,9 @@ def best_bond_etf():
         bondData = json.load(file)
     data = []
     for bd in bondData:
-        price = YahooFinancials(bd['symbol']).get_current_price()
-        per_change = YahooFinancials(bd['symbol']).get_current_percent_change()
-        curr_change = YahooFinancials(bd['symbol']).get_current_change()
+        price = YahooFinancials(bd['symbol'], concurrent=True).get_current_price()
+        per_change = YahooFinancials(bd['symbol'], concurrent=True).get_current_percent_change()
+        curr_change = YahooFinancials(bd['symbol'], concurrent=True).get_current_change()
         name = bd['name']
         symbol = bd['symbol']
         data.append({
@@ -74,9 +74,9 @@ def best_gold_etf():
         goldData = json.load(file)
     data = []
     for gd in goldData:
-        price = YahooFinancials(gd['symbol']).get_current_price()
-        per_change = YahooFinancials(gd['symbol']).get_current_percent_change()
-        curr_change = YahooFinancials(gd['symbol']).get_current_change()
+        price = YahooFinancials(gd['symbol'], concurrent=True).get_current_price()
+        per_change = YahooFinancials(gd['symbol'], concurrent=True).get_current_percent_change()
+        curr_change = YahooFinancials(gd['symbol'], concurrent=True).get_current_change()
         name = gd['name']
         symbol = gd['symbol']
         data.append({
@@ -93,9 +93,9 @@ def best_index_etf():
         indexData = json.load(file)
     data = []
     for indexd in indexData:
-        price = YahooFinancials(indexd['symbol']).get_current_price()
-        per_change = YahooFinancials(indexd['symbol']).get_current_percent_change()
-        curr_change = YahooFinancials(indexd['symbol']).get_current_change()
+        price = YahooFinancials(indexd['symbol'], concurrent=True).get_current_price()
+        per_change = YahooFinancials(indexd['symbol'], concurrent=True).get_current_percent_change()
+        curr_change = YahooFinancials(indexd['symbol'], concurrent=True).get_current_change()
         name = indexd['name']
         symbol = indexd['symbol']
         data.append({
@@ -112,9 +112,9 @@ def best_sector_etf():
         sectorData = json.load(file)
     data = []
     for sd in sectorData:
-        price = YahooFinancials(sd['symbol']).get_current_price()
-        per_change = YahooFinancials(sd['symbol']).get_current_percent_change()
-        curr_change = YahooFinancials(sd['symbol']).get_current_change()
+        price = YahooFinancials(sd['symbol'], concurrent=True).get_current_price()
+        per_change = YahooFinancials(sd['symbol'], concurrent=True).get_current_percent_change()
+        curr_change = YahooFinancials(sd['symbol'], concurrent=True).get_current_change()
         name = sd['name']
         symbol = sd['symbol']
         data.append({
@@ -128,16 +128,16 @@ def best_sector_etf():
 
 def etfCurrentPrice(symbol: str):
     return {
-        "curr_price" : YahooFinancials(symbol).get_current_price(),
-        "curr_per_change": YahooFinancials(symbol).get_current_percent_change(),
-        "curr_change": YahooFinancials(symbol).get_current_change(),
+        "curr_price" : YahooFinancials(symbol, concurrent=True).get_current_price(),
+        "curr_per_change": YahooFinancials(symbol, concurrent=True).get_current_percent_change(),
+        "curr_change": YahooFinancials(symbol, concurrent=True).get_current_change(),
     }
 
 def etfDetails(symbol: str):
     info = yf.Ticker("UTIBANKETF.NS").info
-    curr_price = YahooFinancials("UTIBANKETF.NS").get_current_price()
-    per_change = YahooFinancials("UTIBANKETF.NS").get_current_percent_change()
-    curr_change = YahooFinancials("UTIBANKETF.NS").get_current_change()
+    curr_price = YahooFinancials(symbol, concurrent=True).get_current_price()
+    per_change = YahooFinancials(symbol, concurrent=True).get_current_percent_change()
+    curr_change = YahooFinancials(symbol, concurrent=True).get_current_change()
     
     return {
         "info": info,
@@ -146,6 +146,9 @@ def etfDetails(symbol: str):
         "per_change": per_change
     }
 
-def etfHistoricalData(symbol: str, period: str, interval: str): 
+def etfHistoricalData(symbol: str, period: str, interval: str):
+    print(symbol)
+    print(period)
+    print(interval)
     historical_data = json.loads(Ticker(symbol).history(period, interval).to_json(orient="table"))['data']
     return historical_data
