@@ -269,11 +269,7 @@ def read_mutual_fund_price(symbol: str):
 # ------------------------------------------ ETFs ---------------------------------------------
 
 @app.get("/all/etfs")
-<<<<<<< HEAD
-def read_etfs(skip: int = 1, limit: int = 10):
-=======
 def read_etfs(skip: int = 1, limit: int = 6):
->>>>>>> af48ba35831f007f1d151bada59c3a62e44449c4
     data = all_etfs(skip, limit)
     return data
 
