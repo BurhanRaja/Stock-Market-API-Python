@@ -237,10 +237,11 @@ def axis_mutual_fund(skip: int, limit: int):
 
 # Get Aditya Birla Mutual Fund
 def aditya_birla_mutual_fund(skip: int, limit: int):
-    with open('./data/Aditya_Birla_Sub_Life.json') as file:
+    with open('./data/Aditya_Birla_Sun_Life.json') as file:
         json_data = json.load(file)
     
-        return {
+    
+    return {
         "data": json_data[skip:limit],
         "total_pages": int(len(json_data) / 10),
         "page_num": int(limit / 10)
