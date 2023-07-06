@@ -1,10 +1,7 @@
 from mftool import Mftool
 import json
 import yahooquery as yq
-import yfinance as yf
-from pprint import pprint
 from yahoofinancials import YahooFinancials
-from pprint import pprint
 
 mf = Mftool()
 

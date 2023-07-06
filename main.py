@@ -251,8 +251,8 @@ def read_best_tax_saver_mf(skip: int=0, limit: int=10):
 # Get Mutual Fund History
 @app.get("/mutualfund/history/{mf}")
 def read_mutual_fund_history(mf: str, duration: str):
-    history_data = mutualfund_history(mf, duration)
-    return history_data
+    data = mutualfund_history(mf, duration)
+    return data
 
 # Get Mutual Fund Details
 @app.get("/mutualfund/details/{mf}")
