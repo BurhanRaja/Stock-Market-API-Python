@@ -269,7 +269,11 @@ def read_mutual_fund_price(symbol: str):
 # ------------------------------------------ ETFs ---------------------------------------------
 
 @app.get("/all/etfs")
+<<<<<<< HEAD
 def read_etfs(skip: int = 1, limit: int = 10):
+=======
+def read_etfs(skip: int = 1, limit: int = 6):
+>>>>>>> af48ba35831f007f1d151bada59c3a62e44449c4
     data = all_etfs(skip, limit)
     return data
 
@@ -301,4 +305,14 @@ def read_best_sector_etf():
 @app.get("/etf/current/price/{symbol}")
 def read_etf_price(symbol: str):
     data = etfCurrentPrice(symbol)
+    return data
+
+@app.get("/etf/details/{symbol}")
+def read_etf_details(symbol: str):
+    data = etfDetails(symbol)
+    return data
+
+@app.get("/etf/historical-data/{symbol}")
+def read_etf_historical_data(symbol: str, period: str = "ytd", interval: str = "1mo"):
+    data = etfHistoricalData(symbol, period, interval)
     return data
