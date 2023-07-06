@@ -7,9 +7,8 @@ from pprint import pprint
 # Stock List
 def handle_stock_list(exchange: str, offset: int, limit: int):
     if (exchange == "NSE"):
-        tickers = pd.read_html('https://en.wikipedia.org/wiki/NIFTY_50', match="Company Name")
-        data = tickers[0].to_json(orient="records")
-        objArr = json.loads(data)
+        with open("./data/NSE_Stocks.json", "r") as file:
+            objArr = json.load(file)
 
         refinedData = []
 
@@ -29,9 +28,8 @@ def handle_stock_list(exchange: str, offset: int, limit: int):
 
         return refinedData
     else:
-        tickers = pd.read_html('https://en.wikipedia.org/wiki/BSE_SENSEX', match="ticker Number")
-        data = tickers[0].to_json(orient="records")
-        objArr = json.loads(data)
+        with open("./data/BSE_Stocks.json", "r") as file:
+            objArr = json.load(file)
         
         refinedData = []
 
