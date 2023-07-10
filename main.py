@@ -17,6 +17,11 @@ def read_stocks(exchange: str, skip: int = 0, limit: int = 10):
     stocklist = handle_stock_list(exchange, skip, limit)
     return stocklist
 
+@app.get("/stock/index")
+def read_stock_index():
+    data = handle_index()
+    return data
+
 # Stock Current Price
 @app.get("/stock/currentprice/{stock}")
 def read_current_price(stock: str):

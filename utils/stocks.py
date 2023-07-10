@@ -3,6 +3,7 @@ import pandas as pd
 import json
 from yahooquery import Ticker
 from pprint import pprint
+from yahoofinancials import YahooFinancials
 
 # Stock List
 def handle_stock_list(exchange: str, offset: int, limit: int):
@@ -167,3 +168,21 @@ def handle_stock_price(symbol: str):
         'curr_gap' : curr_gap,
         'curr_gap_percentage': current_gap_percentage
     }
+    
+def handle_index():
+    nse = YahooFinancials("^NSEI")
+    bse = YahooFinancials("^BSESN")
+    return {
+        "nse": {
+            "current_price": nse.get_current_price(),
+            "curr_per": nse.get_current_percent_change(),
+            "curr_gap": nse.get_current_change()
+        },
+        "bse": {
+            "current_price": bse.get_current_price(),
+            "curr_per": bse.get_current_percent_change(),
+            "curr_gap": bse.get_current_change()
+        }
+    }
+    
+handle_index()
