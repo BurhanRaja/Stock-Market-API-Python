@@ -174,11 +174,15 @@ def handle_index():
     bse = YahooFinancials("^BSESN")
     return {
         "nse": {
+            "name": "NIFTY50",
+            "symbol": "^NSEI",
             "current_price": nse.get_current_price(),
             "curr_per": nse.get_current_percent_change(),
             "curr_gap": nse.get_current_change()
         },
         "bse": {
+            "name": "SENSEX",
+            "symbol": "^BSESN",
             "current_price": bse.get_current_price(),
             "curr_per": bse.get_current_percent_change(),
             "curr_gap": bse.get_current_change()
