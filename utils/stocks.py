@@ -4,6 +4,9 @@ import json
 from yahooquery import Ticker
 from pprint import pprint
 from yahoofinancials import YahooFinancials
+from nsepython import *
+
+pprint(json.loads(nse_get_top_gainers().to_json(orient='records')[1:-1].replace('},{', '} {')))
 
 # Stock List
 def handle_stock_list(exchange: str, offset: int, limit: int):
