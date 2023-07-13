@@ -29,7 +29,7 @@ def traverse_mutual_fund_all(data, skip: int=None, limit: int=None):
 def all_mutual_fund(skip: int, limit: int):
     with open('./data/code.json') as file:
         json_data = json.load(file)
-    
+        
     arr = traverse_mutual_fund_all(json_data, skip, limit)
     
     return arr

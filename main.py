@@ -1,20 +1,20 @@
 from fastapi import FastAPI
-# from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.cors import CORSMiddleware
 from utils.stocks import *
 from utils.mutualfunds import *
 from utils.etf import *
 
 app = FastAPI()
 
-# origins = ["*"]
+origins = ["*"]
 
-# app.add_middleware(
-#     CORSMiddleware,
-#     allow_origins=origins,
-#     allow_credentials=True,
-#     allow_methods=["*"],
-#     allow_headers=["*"],
-# )
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get("/")
 def read_root():
@@ -111,6 +111,11 @@ def read_income_statement(stock: str, duration: str):
         stock_incomestatement = handle_stock_income_statement(stock, 'q')
     return stock_incomestatement
 
+# Get Top Gainers and Losers of Stocks
+@app.get("/top/stocks")
+def read_top_stocks():
+    data = get_top_stocks()
+    return data
 
 # -------------------------------- MUTUAL FUND ----------------------------------
 

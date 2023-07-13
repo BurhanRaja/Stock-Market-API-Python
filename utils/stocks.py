@@ -6,8 +6,6 @@ from pprint import pprint
 from yahoofinancials import YahooFinancials
 from nsepython import *
 
-pprint(json.loads(nse_get_top_gainers().to_json(orient='records')[1:-1].replace('},{', '} {')))
-
 # Stock List
 def handle_stock_list(exchange: str, offset: int, limit: int):
     if (exchange == "NSE"):
@@ -192,4 +190,11 @@ def handle_index():
         }
     }
     
-handle_index()
+def get_top_stocks():
+    top_gainers = json.loads(nse_get_top_gainers().to_json(orient="records"))
+    top_losers = json.loads(nse_get_top_losers().to_json(orient="records"))
+
+    return {
+        "gainers": top_gainers,
+        "losers": top_losers
+    }
