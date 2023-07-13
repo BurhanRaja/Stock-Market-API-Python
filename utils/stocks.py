@@ -193,9 +193,10 @@ def handle_index():
     }
     
 def handle_top_stock():
-    gainers = json.loads(nse_get_top_gainers().to_json(orient="records"))
-    losers = json.loads(nse_get_top_losers().to_json(orient="records"))
+    top_gainers = json.loads(nse_get_top_gainers().to_json(orient="records"))
+    top_losers = json.loads(nse_get_top_losers().to_json(orient="records"))
+
     return {
-        "gainers": gainers,
-        "losers": losers
+        "gainers": top_gainers,
+        "losers": top_losers
     }
