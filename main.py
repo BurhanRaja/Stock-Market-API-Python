@@ -1,20 +1,20 @@
 from fastapi import FastAPI
-# from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.cors import CORSMiddleware
 from utils.stocks import *
 from utils.mutualfunds import *
 from utils.etf import *
 
 app = FastAPI()
 
-# origins = ["*"]
+origins = ["*"]
 
-# app.add_middleware(
-#     CORSMiddleware,
-#     allow_origins=origins,
-#     allow_credentials=True,
-#     allow_methods=["*"],
-#     allow_headers=["*"],
-# )
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get("/")
 def read_root():
@@ -31,6 +31,11 @@ def read_stocks(exchange: str, skip: int = 0, limit: int = 10):
 @app.get("/stock/index")
 def read_stock_index():
     data = handle_index()
+    return data
+
+@app.get("/top/stocks")
+def read_stock_index():
+    data = handle_top_stock()
     return data
 
 # Stock Current Price
