@@ -28,11 +28,13 @@ def read_stocks(exchange: str, skip: int = 0, limit: int = 10):
     stocklist = handle_stock_list(exchange, skip, limit)
     return stocklist
 
+# Get Nifty50 and Sensex
 @app.get("/stock/index")
 def read_stock_index():
     data = handle_index()
     return data
 
+# Gte Top Gainers and Losers
 @app.get("/top/stocks")
 def read_stock_index():
     data = handle_top_stock()
@@ -115,12 +117,6 @@ def read_income_statement(stock: str, duration: str):
     else:
         stock_incomestatement = handle_stock_income_statement(stock, 'q')
     return stock_incomestatement
-
-# Get Top Gainers and Losers of Stocks
-@app.get("/top/stocks")
-def read_top_stocks():
-    data = get_top_stocks()
-    return data
 
 # -------------------------------- MUTUAL FUND ----------------------------------
 
