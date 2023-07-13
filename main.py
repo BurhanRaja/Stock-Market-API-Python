@@ -33,6 +33,11 @@ def read_stock_index():
     data = handle_index()
     return data
 
+@app.get("/top/stocks")
+def read_stock_index():
+    data = handle_top_stock()
+    return data
+
 # Stock Current Price
 @app.get("/stock/currentprice/{stock}")
 def read_current_price(stock: str):
