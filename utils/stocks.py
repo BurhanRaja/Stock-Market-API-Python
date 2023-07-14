@@ -173,7 +173,7 @@ def handle_stock_price(symbol: str):
     }
     
 def handle_index():
-    nse = YahooFinancials("^NSEI")
+    nse = nse_index('NIFTY')
     bse = YahooFinancials("^BSESN")
     return {
         "nse": {
@@ -200,3 +200,7 @@ def handle_top_stock():
         "gainers": top_gainers,
         "losers": top_losers
     }
+
+
+print(YahooFinancials('^BSESN').get_current_price())
+# print(nse_get_index_quote('nifty 50'))
