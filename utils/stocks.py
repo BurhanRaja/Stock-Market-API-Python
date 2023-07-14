@@ -173,8 +173,9 @@ def handle_stock_price(symbol: str):
     }
     
 def handle_index():
-    nse = nse_index('NIFTY')
+    nse = nse_index('^NSE')
     bse = YahooFinancials("^BSESN")
+
     return {
         "nse": {
             "name": "NIFTY50",
@@ -202,5 +203,11 @@ def handle_top_stock():
     }
 
 
-print(YahooFinancials('^BSESN').get_current_price())
+# print(YahooFinancials('^BSESN').get_current_price())
 # print(nse_get_index_quote('nifty 50'))
+
+# data = requests.get("https://query2.finance.yahoo.com/v10/finance/quoteSummary/%5Ebsesn?modules=price&formatted=False&lang=en-US&region=US&corsDomain=finance.yahoo.com&crumb=OTFulY6.RNJ", headers={
+#     'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36'
+# })
+
+print(yf.Ticker("^NSEI").info)
