@@ -9,6 +9,7 @@ from scrapers.StockData import STOCKMARKET
 
 # pprint(json.loads(nse_get_top_gainers().to_json(orient='records')[1:-1].replace('},{', '} {')))
 market=STOCKMARKET()
+# print(market.get_index_data("nse/nifty"))
 
 # Stock List
 def handle_stock_list(exchange: str, offset: int, limit: int):
@@ -125,7 +126,7 @@ def handle_stock_balance_sheet_graph(symbol: str, duration: str):
 
 # Stock Historical Data
 def handle_stock_historical_data(symbol: str, period: str, interval: str):
-    historical_data = json.loads(Ticker(symbol).history(period, interval).to_json(orient="table"))['data']
+    historical_data = json.loads(yf.Ticker(symbol+".NS").history(period, interval).to_json(orient="table"))['data']
     return historical_data
 
 # Stock Info Profile
@@ -193,13 +194,3 @@ def handle_top_stock():
         "gainers": top_gainers,
         "losers": top_losers
     }
-
-
-# print(YahooFinancials('^BSESN').get_current_price())
-# print(nse_get_index_quote('nifty 50'))
-
-# data = requests.get("https://query2.finance.yahoo.com/v10/finance/quoteSummary/%5Ebsesn?modules=price&formatted=False&lang=en-US&region=US&corsDomain=finance.yahoo.com&crumb=OTFulY6.RNJ", headers={
-#     'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36'
-# })
-
-# print(yf.Ticker("^NSEI").info)
