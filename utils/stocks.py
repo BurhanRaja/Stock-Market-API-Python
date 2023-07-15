@@ -5,8 +5,10 @@ from yahooquery import Ticker
 from pprint import pprint
 from yahoofinancials import YahooFinancials
 from nsepython import *
+from scrapers.StockData import STOCKMARKET
 
 # pprint(json.loads(nse_get_top_gainers().to_json(orient='records')[1:-1].replace('},{', '} {')))
+market=STOCKMARKET()
 
 # Stock List
 def handle_stock_list(exchange: str, offset: int, limit: int):
@@ -17,18 +19,8 @@ def handle_stock_list(exchange: str, offset: int, limit: int):
         refinedData = []
 
         for el in objArr[offset:limit]:
-            stock = yf.Ticker(el['Symbol'] + ".NS").info
-            current_gap_percentage = round(((stock['currentPrice'] - stock['regularMarketPreviousClose']) / stock['currentPrice']) * 100, 2)
-            curr_gap = round(stock['currentPrice'] - stock['regularMarketPreviousClose'], 2)
-            
-            refinedData.append({
-                'company_name': el['Company Name'],
-                'symbol': el['Symbol'] + ".NS",
-                'sector': el['Sector[18]'],
-                "price": stock['currentPrice'],
-                'curr_per': current_gap_percentage,
-                'curr_gap': curr_gap
-            })
+            data=market.get_company_data(el['Symbol'])
+            refinedData.append(data)
 
         return refinedData
     else:
@@ -173,7 +165,7 @@ def handle_stock_price(symbol: str):
     }
     
 def handle_index():
-    nse = nse_index('^NSE')
+    nse = YahooFinancials('^NSE')
     bse = YahooFinancials("^BSESN")
 
     return {
@@ -210,4 +202,4 @@ def handle_top_stock():
 #     'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36'
 # })
 
-print(yf.Ticker("^NSEI").info)
+# print(yf.Ticker("^NSEI").info)
