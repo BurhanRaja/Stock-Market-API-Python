@@ -21,24 +21,29 @@ def read_root():
     return {"message": "Stock Market API"}
 
 # ------------------------------------ STOCKS -------------------------------------------
-
-# ALl Stocks NSE or BSE
-@app.get("/all/stocks/{exchange}")
-def read_stocks(exchange: str, skip: int = 0, limit: int = 10):
-    stocklist = handle_stock_list(exchange, skip, limit)
-    return stocklist
-
 # Get Nifty50 and Sensex
 @app.get("/stock/index")
 def read_stock_index():
     data = handle_index()
     return data
 
-# Gte Top Gainers and Losers
-@app.get("/top/stocks")
-def read_stock_index():
-    data = handle_top_stock()
+# Index Details
+@app.get("/stocks/index/details/{index}")
+def read_index_details(index: str):
+    data=handle_index_details(index)
     return data
+
+# Get Top Gainers and Losers
+@app.get("/top/stocks")
+def read_stock_index(skip: int=0, limit: int=5):
+    data = handle_top_stock(skip, limit)
+    return data
+
+# ALl Stocks NSE or BSE
+@app.get("/all/stocks/{exchange}")
+def read_stocks(exchange: str, skip: int = 0, limit: int = 10):
+    stocklist = handle_stock_list(exchange, skip, limit)
+    return stocklist
 
 # Stock Current Price
 @app.get("/stock/currentprice/{stock}")
@@ -52,33 +57,6 @@ def read_stock_financial_ratios(stock: str):
     stock_financial_ratios = handle_stock_financial_ratios(stock)
     return stock_financial_ratios
 
-# Stock Revenue Statement
-@app.get("/stock/revenue/statement/graph/{stock}")
-def read_stock_revenue_statement_graph(stock: str, duration: str):
-    if (duration == "yearly"):
-        stock_revenue_statement = handle_stock_revenue_statement_graph(stock, 'a')
-    else:
-        stock_revenue_statement = handle_stock_revenue_statement_graph(stock, 'q')
-    return stock_revenue_statement
-
-# Stock Balance Sheet
-@app.get("/stock/balance/sheet/graph/{stock}")
-def read_stock_balance_sheet_graph(stock: str, duration: str):
-    if (duration == "yearly"):
-        stock_balance_sheet = handle_stock_balance_sheet_graph(stock, 'a')
-    else:
-        stock_balance_sheet = handle_stock_balance_sheet_graph(stock, 'q')
-    return stock_balance_sheet
-
-# Stock Cash Flow
-@app.get("/stock/cash/flow/graph/{stock}")
-def read_cash_flow_graph(stock: str, duration: str):
-    if (duration == "yearly"):
-        stock_cash_flow = handle_stock_cash_flow_graph(stock, 'a')
-    else:
-        stock_cash_flow = handle_stock_cash_flow_graph(stock, 'q')
-    return stock_cash_flow
-
 # Stock Historical Data
 @app.get("/stock/historical/data/{stock}")
 def read_historical_data(stock: str, period: str, interval: str):
@@ -91,31 +69,27 @@ def read_stock_info(stock: str):
     stock_info = handle_stock_info_profile(stock)
     return stock_info
 
+@app.get("/stocks/suggestion/{stock}")
+def read_stock_suggestion(stock: str):
+    stock_suggestion=handle_strengths_weakness(stock)
+    return stock_suggestion
+
 # Stock Cash Flow
 @app.get("/stock/cash/flow/{stock}")
-def read_stock_cash_flow(stock: str, duration: str):
-    if (duration == "yearly"):
-        stock_cashflow = handle_stock_cash_flow(stock, 'a')
-    else:
-        stock_cashflow = handle_stock_cash_flow(stock, 'q')
+def read_stock_cash_flow(stock: str):
+    stock_cashflow = handle_stock_cash_flow(stock)
     return stock_cashflow
 
 # Stock Balance Sheet
 @app.get("/stock/balancesheet/{stock}")
-def read_balancesheet(stock: str, duration: str):
-    if (duration == "yearly"):
-        stock_balancesheet = handle_stock_balance_sheet(stock, 'a')
-    else:
-        stock_balancesheet = handle_stock_balance_sheet(stock, 'q')
+def read_balancesheet(stock: str):
+    stock_balancesheet = handle_stock_balance_sheet(stock)
     return stock_balancesheet
 
 # Stock Income Statement
 @app.get("/stock/income/statement/{stock}")
-def read_income_statement(stock: str, duration: str):
-    if (duration == "yearly"):
-        stock_incomestatement = handle_stock_income_statement(stock, 'a')
-    else:
-        stock_incomestatement = handle_stock_income_statement(stock, 'q')
+def read_income_statement(stock: str):
+    stock_incomestatement = handle_stock_income_statement(stock)
     return stock_incomestatement
 
 # -------------------------------- MUTUAL FUND ----------------------------------
@@ -272,8 +246,8 @@ def read_best_tax_saver_mf(skip: int=0, limit: int=10):
 
 # Get Mutual Fund History
 @app.get("/mutualfund/history/{mf}")
-def read_mutual_fund_history(mf: str, duration: str):
-    data = mutualfund_history(mf, duration)
+def read_mutual_fund_history(mf: str, start: str, end: str, interval: str):
+    data = mutualfund_history(mf, start, end, interval)
     return data
 
 # Get Mutual Fund Details
@@ -331,6 +305,6 @@ def read_etf_details(symbol: str):
     return data
 
 @app.get("/etf/historical-data/{symbol}")
-def read_etf_historical_data(symbol: str, period: str = "ytd", interval: str = "1mo"):
-    data = etfHistoricalData(symbol, period, interval)
+def read_etf_historical_data(symbol: str, start: str, end: str, interval: str):
+    data = etfHistoricalData(symbol, start, end, interval)
     return data

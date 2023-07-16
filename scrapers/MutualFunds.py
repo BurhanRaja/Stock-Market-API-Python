@@ -89,4 +89,28 @@ class MUTUALFUND:
             "sectorWeighting": sectorWeightingData,
             "equityHoldings": equityHoldingsData
         }
+    
+    def get_historical_data(self, symbol: str, start: str, end: str, interval: str):
+        data=self.session.get("https://finance.yahoo.com/quote/"+ symbol +"/history?period1="+ start +"&period2="+ end +"&interval="+ interval +"&filter=history&frequency="+ interval +"1d&includeAdjustedClose=true", headers=self.headers)
+        html=BeautifulSoup(data.text, "html.parser")
+        
+        historytable=html.find(id="Col1-1-HistoricalDataTable-Proxy").find("table").find("tbody").find_all("tr")
+        historyData=[]
+        
+        for history in historytable:
+            date=history.find(class_="Py(10px) Ta(start) Pend(10px)").getText()
+            tds=history.find_all(class_="Py(10px) Pstart(10px)")
+            
+            historyData.append({
+                "date": date,
+                "open": tds[0].getText(),
+                "high": tds[1].getText(),
+                "low": tds[2].getText(),
+                "close": tds[3].getText(),
+                "adjClose": tds[4].getText()
+            })
+
+        return historyData
+        
+MUTUALFUND().get_historical_data("0P0001IUCE.BO", "1672531200", "1689465600", "1d")
         

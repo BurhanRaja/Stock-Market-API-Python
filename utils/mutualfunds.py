@@ -1,9 +1,7 @@
-from mftool import Mftool
 import json
-import yahooquery as yq
-from yahoofinancials import YahooFinancials
+from scrapers.MutualFunds import MUTUALFUND
 
-mf = Mftool()
+mutualFunds=MUTUALFUND()
 
 refinedArray=[]
 
@@ -13,12 +11,12 @@ def traverse_mutual_fund_all(data, skip: int=None, limit: int=None):
             if isinstance(value, (dict, list)):
                 traverse_mutual_fund_all(value)
             elif isinstance(value, str):
-                performace = yq.Ticker(key+".BO").fund_performance[key+".BO"]
+                performace = mutualFunds.get_performace(key+".BO")
                 refinedArray.append({
                     "symbol": key,
                     "fund": value,
-                    "return_one_year": float(performace['trailingReturns']['oneYear']) * 100, 
-                    "return_five_year": float(performace['trailingReturns']['fiveYear']) * 100, 
+                    "return_one_year": performace['one_year'],
+                    "return_five_year": performace['five_year']
                 })
     elif isinstance(data, list):
         for item in data[skip:limit]:
@@ -300,31 +298,21 @@ def best_tax_saver_mutual_fund(skip: int, limit: int):
     }
         
 # Mutual Fund History 
-def mutualfund_history(mf_id: str, duration: str):
-    history_data = mf.history(mf_id,start=None,end=None,period=duration,as_dataframe=True)
-    
-    return json.loads(history_data.to_json(orient="table"))['data']
+def mutualfund_history(mf_id: str, start: str, end: str, interval: str):
+    data=mutualFunds.get_historical_data(mf_id+".BO", start, end, interval)
+    return data
 
 # Mutual Fund Details
 def mutualfund_info(mf_id: str):
-    info_data = json.loads(mf.get_scheme_info(mf_id))
-    performance = yq.Ticker(mf_id+".BO").fund_performance
-    ownership = json.loads(yq.Ticker(mf_id+".BO").fund_ownership.to_json(orient="records"))
-    bondHoldings = yq.Ticker(mf_id+".BO").fund_bond_holdings
-    equityHoldings = yq.Ticker(mf_id+".BO").fund_equity_holdings
-    holdingInfo = yq.Ticker(mf_id+".BO").fund_holding_info
+    info_data = mutualFunds.get_curr_data(mf_id+".BO")
+    performance = mutualFunds.get_performace(mf_id+".BO")
+    holdingInfo = mutualFunds.get_holdings_data(mf_id+".BO")
     return {
         "info": info_data,
-        "ownership": ownership,
-        "performance": performance[mf_id+".BO"],
-        "holding_info": holdingInfo[mf_id+".BO"],
-        "bond_holdings": bondHoldings[mf_id+".BO"],
-        "equity_holdings": equityHoldings,
+        "performance": performance,
+        "holding_info": holdingInfo,
     }
 
 def mutualFundCurrentPrice(symbol: str):
-    return {
-        "curr_price" : YahooFinancials(symbol + ".BO").get_current_price(),
-        "curr_per_change": YahooFinancials(symbol + ".BO").get_current_percent_change(),
-        "curr_change": YahooFinancials(symbol + ".BO").get_current_change(),
-    }
+    data=mutualFunds.get_curr_data(symbol+".BO")
+    return data

@@ -12,7 +12,7 @@ class ETF:
         data=self.session.get("https://finance.yahoo.com/quote/"+symbol, headers=self.headers)
         html=BeautifulSoup(data.text, "html.parser")
         
-        price=float(html.find(class_="Fw(b) Fz(36px) Mb(-4px) D(ib)").getText())
+        price=html.find(class_="Fw(b) Fz(36px) Mb(-4px) D(ib)").getText()
         price_change=float(html.find(class_="Fw(500) Pstart(8px) Fz(24px)").find("span").getText().replace("+", ""))
         per_change=float(html.find_all(class_="Fw(500) Pstart(8px) Fz(24px)")[1].find("span").getText().replace("(", "").replace(")", "").replace("+", "").replace("%", ""))
 
@@ -39,3 +39,26 @@ class ETF:
             })
         
         return summaryData
+    
+    # Get Historical Data
+    def get_historical_data(self, symbol: str, start: str, end: str, interval: str):
+        data=self.session.get("https://finance.yahoo.com/quote/"+ symbol +"/history?period1="+ start +"&period2="+ end +"&interval="+ interval +"&filter=history&frequency="+ interval +"1d&includeAdjustedClose=true", headers=self.headers)
+        html=BeautifulSoup(data.text, "html.parser")
+        
+        historytable=html.find(id="Col1-1-HistoricalDataTable-Proxy").find("table").find("tbody").find_all("tr")
+        historyData=[]
+        
+        for history in historytable:
+            date=history.find(class_="Py(10px) Ta(start) Pend(10px)").getText()
+            tds=history.find_all(class_="Py(10px) Pstart(10px)")
+            
+            historyData.append({
+                "date": date,
+                "open": tds[0].getText(),
+                "high": tds[1].getText(),
+                "low": tds[2].getText(),
+                "close": tds[3].getText(),
+                "adjClose": tds[4].getText()
+            })
+
+        return historyData

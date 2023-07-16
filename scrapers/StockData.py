@@ -12,7 +12,7 @@ class STOCKMARKET:
         self.session = requests.Session()
 
     # Get Index Data
-    def get_index_data(self, urlStr="nse/nifty"):
+    def get_index_data(self, urlStr: str, symbol: str):
         data=self.session.get("https://ticker.finology.in/market/index/"+urlStr, headers=self.headers)
         html=BeautifulSoup(data.text, "html.parser")
         # Get Name
@@ -31,6 +31,7 @@ class STOCKMARKET:
             curr_per_change=float("-0"+data.find(id="mainContent_pnlPriceChange").find_all(class_="text-danger")[1].find(class_="Number").getText())
         return {
             "name": name,
+            "symbol": symbol,
             "curr_price": curr_price,
             "curr_change": curr_change,
             "curr_per_change": curr_per_change
@@ -180,7 +181,9 @@ class STOCKMARKET:
                 "name": re.sub(" +", " ", data.find("small").getText().replace("\n", "").replace("\r", "")),
                 "value": re.sub(" +", " ", data.find("p").getText().replace("\n", "").replace("\r", "")).replace("\xa0", "")
             })
-        return companyEssentials
+        return {
+            "companyEssentials": companyEssentials
+        }
     
     # Get Quaterly Results
     def get_quaterly_results(self, symbol: str):
@@ -200,7 +203,9 @@ class STOCKMARKET:
                 "Dec 2022": re.sub(" +", " ", allCol[3].find("span").getText().replace("\n", "").replace("\r", "")),
                 "March 2022": re.sub(" +", " ", allCol[4].find("span").getText().replace("\n", "").replace("\r", ""))
             })
-        return quaterlyTableData
+        return {
+            "quaterlyReturns": quaterlyTableData
+        }
 
     # Get yearly Results 
     def get_yearly_results(self, symbol: str):
@@ -220,7 +225,9 @@ class STOCKMARKET:
                 "March 2022": re.sub(" +", " ", allCol[3].find("span").getText().replace("\n", "").replace("\r", "")),
                 "March 2023": re.sub(" +", " ", allCol[4].find("span").getText().replace("\n", "").replace("\r", ""))
             })
-        return yearlyTableData
+        return {
+            "yearlyReturns": yearlyTableData
+        }
     
     # Get Yearly Balance Sheet
     def get_yearly_balance_sheet(self, symbol: str):
@@ -257,13 +264,20 @@ class STOCKMARKET:
             "equityLiabilities": equityLiabilities,
             "assets" : assets
         }
-        return balanceSheetTableData
+        return {
+            "balanceSheet": balanceSheetTableData
+        }
 
     # Get Yearly Cash Flow
     def get_yearly_cash_flow(self, symbol: str):
         data=self.session.get("https://ticker.finology.in/company/"+symbol, headers=self.headers)
         html=BeautifulSoup(data.text, "html.parser")
-        yearlyTable=html.find(id="mainContent_cashflows").find("table")
+        if (html.find(id="mainContent_cashflows") == None):
+            return {
+                "cashflow": []
+            }
+
+        yearlyTable=html.find(id="mainContent_cashflows").find("table")        
         tableBody=yearlyTable.find("tbody").find_all("tr")
         yearlyTableData=[]
         for allRow in tableBody:
@@ -277,7 +291,9 @@ class STOCKMARKET:
                 "March 2022": re.sub(" +", " ", allCol[3].getText().replace("\n", "").replace("\r", "")),
                 "March 2023": re.sub(" +", " ", allCol[4].getText().replace("\n", "").replace("\r", ""))
             })
-        return yearlyTableData
+        return {
+            "cashflows": yearlyTableData
+        }
     
     # Get All Ratios
     def get_financial_ratios(self, symbol: str):
@@ -296,10 +312,12 @@ class STOCKMARKET:
                     "5 year": re.sub(" +", " ", ratiosYears[2].find(class_="durationvalue").getText().replace("\n", "").replace("\r", ""))
                 }
             else:
-                data=re.sub(" +", " ", ratios.find(class_="h2").getText().replace("\n", "").replace("\r", ""))
+                data=re.sub(" +", " ", ratios.find(class_="Number").getText().replace("\n", "").replace("\r", ""))
             allRatios.append({
                 "name": name,
                 "data": data
             })
-        return allRatios
+        return {
+            "ratios": allRatios
+        }
     
