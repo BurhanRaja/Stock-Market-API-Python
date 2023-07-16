@@ -6,71 +6,36 @@ from pprint import pprint
 from yahoofinancials import YahooFinancials
 from nsepython import *
 from scrapers.StockData import STOCKMARKET
+from scrapers.MutualFunds import MUTUALFUND
+from scrapers.ETF import ETF
 
-# pprint(json.loads(nse_get_top_gainers().to_json(orient='records')[1:-1].replace('},{', '} {')))
-market=STOCKMARKET()
-# print(market.get_index_data("nse/nifty"))
+stock=STOCKMARKET()
+mutualFunds=MUTUALFUND()
+etfs=ETF()
 
 # Stock List
 def handle_stock_list(exchange: str, offset: int, limit: int):
     if (exchange == "NSE"):
         with open("./data/NSE_Stocks.json", "r") as file:
             objArr = json.load(file)
-
         refinedData = []
-
         for el in objArr[offset:limit]:
-            data=market.get_company_data(el['Symbol'])
+            data=stock.get_company_data(el['Symbol'])
             refinedData.append(data)
-
         return refinedData
     else:
         with open("./data/BSE_Stocks.json", "r") as file:
             objArr = json.load(file)
-        
         refinedData = []
-
         for el in objArr[offset:limit]:
-            stock = yf.Ticker(el['Symbol']).info
-            current_gap_percentage = round(((stock['currentPrice'] - stock['regularMarketPreviousClose']) / stock['currentPrice']) * 100, 2)
-            curr_gap = round(stock['currentPrice'] - stock['regularMarketPreviousClose'], 2)
-            
-            refinedData.append({
-                'company_name': el['Companies'],
-                'symbol': el['Symbol'],
-                'sector': el['Sector'],
-                'price': stock['currentPrice'],
-                'curr_per': current_gap_percentage,
-                'curr_gap': curr_gap
-            })
+            data=stock.get_company_data(el['Symbol'].replace(".BO", ""))
+            refinedData.append(data)
         return refinedData
 
 # Stock Financial Ratios
 def handle_stock_financial_ratios(symbol: str):
-    financial = yf.Ticker(symbol).info
-        
-    pprint(financial)
-
-    financial_ratios = {
-        'profitability': {
-            'operating_margins': financial.get('operatingMargins', 0) * 100,
-            'profit_margins': financial.get('profitMargins', 0) * 100,
-            'return_on_assets': financial.get('returnOnAssets', 0) * 100,
-            'return_on_equity': financial.get('returnOnEquity', 0) * 100,
-        },
-        'operational': {
-            'current_ratio': financial.get('currentRatio', 'N/A'),
-            'quick_ratio': financial.get('quickRatio', 'N/A'),
-            'debt_to_equity': financial.get('debtToEquity', 'N/A')
-        },
-        'valuation': {
-            'pe_ratio': financial.get('trailingPE', 'N/A'),
-            'pb_ratio': financial.get('currentPrice', 0) / financial.get('bookValue', 0),
-            'ev_ebitda': (financial.get('currentPrice', 0) * financial.get('sharesOutstanding', 0)) + financial.get('totalDebt', 0) - financial.get('totalCash', 0),
-            'dividend_yield': financial.get('trailingAnnualDividendYield', 'N/A')
-        }
-    }
-    return financial_ratios
+    financial = stock.get_financial_ratios(symbol)
+    return financial
 
 # Stock Revenue Statement Graph
 def handle_stock_revenue_statement_graph(symbol: str, duration: str):

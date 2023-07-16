@@ -39,5 +39,3 @@ class ETF:
             })
         
         return summaryData
-
-print(ETF().get_summary("HDFCMFGETF.NS"))
