@@ -12,7 +12,7 @@ class MUTUALFUND:
         data=self.session.get("https://finance.yahoo.com/quote/"+symbol, headers=self.headers)
         html=BeautifulSoup(data.text, "html.parser")
         
-        price=float(html.find(class_="Fw(b) Fz(36px) Mb(-4px) D(ib)").getText())
+        price=html.find(class_="Fw(b) Fz(36px) Mb(-4px) D(ib)").getText()
         price_change=float(html.find(class_="Fw(500) Pstart(8px) Fz(24px)").find("span").getText().replace("+", ""))
         per_change=float(html.find_all(class_="Fw(500) Pstart(8px) Fz(24px)")[1].find("span").getText().replace("(", "").replace(")", "").replace("+", "").replace("%", ""))
         

@@ -12,9 +12,11 @@ def traverse_mutual_fund_all(data, skip: int=None, limit: int=None):
                 traverse_mutual_fund_all(value)
             elif isinstance(value, str):
                 performace = mutualFunds.get_performace(key+".BO")
+                currData=mutualFunds.get_curr_data(key+ ".BO")
                 refinedArray.append({
                     "symbol": key,
                     "fund": value,
+                    "nav": currData['curr_price'],
                     "return_one_year": performace['one_year'],
                     "return_five_year": performace['five_year']
                 })
@@ -27,7 +29,7 @@ def traverse_mutual_fund_all(data, skip: int=None, limit: int=None):
 def all_mutual_fund(skip: int, limit: int):
     with open('./data/code.json') as file:
         json_data = json.load(file)
-        
+    
     arr = traverse_mutual_fund_all(json_data, skip, limit)
     
     return arr

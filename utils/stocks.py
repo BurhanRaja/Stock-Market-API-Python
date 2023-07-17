@@ -20,6 +20,7 @@ def handle_stock_list(exchange: str, offset: int, limit: int):
         for el in objArr[offset:limit]:
             data=stockMarket.get_company_data(el['Symbol'])
             refinedData.append(data)
+        print(len(refinedData))
         return refinedData
     else:
         with open("./data/BSE_Stocks.json", "r") as file:

@@ -120,6 +120,7 @@ class STOCKMARKET:
         data=self.session.get("https://ticker.finology.in/company/"+symbol, headers=self.headers)
         html=BeautifulSoup(data.text, "html.parser")
         full_name=html.find(id="mainContent_ltrlCompName").getText()
+        print(full_name)
         priceData=html.find(id="mainContent_clsprice")
         curr_price=float(priceData.find(class_="currprice").find(class_="Number").getText())
         changeData=priceData.find(id="mainContent_pnlPriceChange").getText()

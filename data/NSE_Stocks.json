@@ -90,11 +90,6 @@
     "Sector[18]": "Information Technology"
   },
   {
-    "Company Name": "HDFC",
-    "Symbol": "HDFC",
-    "Sector[18]": "Financial Services"
-  },
-  {
     "Company Name": "HDFC Bank",
     "Symbol": "HDFCBANK",
     "Sector[18]": "Banking"
@@ -147,8 +142,13 @@
     "Sector[18]": "Construction"
   },
   {
+    "Company Name": "LTIMindtree",
+    "Symbol": "LTIM",
+    "Sector[18]": "Information Technology"
+  },
+  {
     "Company Name": "Mahindra & Mahindra",
-    "Symbol": "M&M",
+    "Symbol": "SCRIP-100520",
     "Sector[18]": "Automobile"
   },
   {
