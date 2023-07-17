@@ -14,9 +14,12 @@ def all_etfs(skip: int = 1, limit: int = 6):
     
     dataArr = []
 
+    objArr=objArr[1:]
+
     for ticker in objArr[skip:limit]:
         symbol = ticker['1'] + ".NS"
-        data=etfs.get_curr_data(symbol)
+        print(symbol)
+        data=etfs.get_curr_data(ticker['1'] + ".NS")
         dataArr.append({
             "name": ticker['0'],
             "symbol": symbol,
@@ -25,7 +28,10 @@ def all_etfs(skip: int = 1, limit: int = 6):
             "curr_price_change": data['price_change']
         })
     
-    return dataArr
+    return {
+        "data": dataArr,
+        "total": len(dataArr)
+    }
     
 def singleETFs(symbol: str):
     data = yf.Ticker(symbol).info

@@ -12,7 +12,7 @@ class MUTUALFUND:
         data=self.session.get("https://finance.yahoo.com/quote/"+symbol, headers=self.headers)
         html=BeautifulSoup(data.text, "html.parser")
         
-        price=html.find(class_="Fw(b) Fz(36px) Mb(-4px) D(ib)").getText()
+        price=float(html.find(class_="Fw(b) Fz(36px) Mb(-4px) D(ib)").getText().replace(",", ""))
         price_change=float(html.find(class_="Fw(500) Pstart(8px) Fz(24px)").find("span").getText().replace("+", ""))
         per_change=float(html.find_all(class_="Fw(500) Pstart(8px) Fz(24px)")[1].find("span").getText().replace("(", "").replace(")", "").replace("+", "").replace("%", ""))
         
@@ -29,12 +29,12 @@ class MUTUALFUND:
         returnsTable=html.find(class_="Pb(20px) smartphone_Px(20px) smartphone_Pt(20px)").find_all(class_="Mb(25px)")[1]
         all_returns=returnsTable.find_all(class_="Bdbw(1px) Bdbc($seperatorColor) Bdbs(s) H(25px) Pt(10px)")
         
-        ytd=all_returns[0].find(class_="W(20%) D(b) Fl(start) Ta(e)").getText().replace("%", "")
-        one_month=all_returns[1].find(class_="W(20%) D(b) Fl(start) Ta(e)").getText().replace("%", "")
-        three_month=all_returns[2].find(class_="W(20%) D(b) Fl(start) Ta(e)").getText().replace("%", "")
-        one_year=all_returns[3].find(class_="W(20%) D(b) Fl(start) Ta(e)").getText().replace("%", "")
-        three_year=all_returns[4].find(class_="W(20%) D(b) Fl(start) Ta(e)").getText().replace("%", "")
-        five_year=all_returns[5].find(class_="W(20%) D(b) Fl(start) Ta(e)").getText().replace("%", "")
+        ytd=all_returns[0].find(class_="W(20%)").getText().replace("%", "")
+        one_month=all_returns[1].find(class_="W(20%)").getText().replace("%", "")
+        three_month=all_returns[2].find(class_="W(20%)").getText().replace("%", "")
+        one_year=all_returns[3].find(class_="W(20%)").getText().replace("%", "")
+        three_year=all_returns[4].find(class_="W(20%)").getText().replace("%", "")
+        five_year=all_returns[5].find(class_="W(20%)").getText().replace("%", "")
         
         return {
             "ytd": float(ytd),

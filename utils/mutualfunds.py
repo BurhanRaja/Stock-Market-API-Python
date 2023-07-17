@@ -5,34 +5,31 @@ mutualFunds=MUTUALFUND()
 
 refinedArray=[]
 
-def traverse_mutual_fund_all(data, skip: int=None, limit: int=None):
-    if isinstance(data, dict):
-        for key, value in data.items():
-            if isinstance(value, (dict, list)):
-                traverse_mutual_fund_all(value)
-            elif isinstance(value, str):
-                performace = mutualFunds.get_performace(key+".BO")
-                currData=mutualFunds.get_curr_data(key+ ".BO")
-                refinedArray.append({
-                    "symbol": key,
-                    "fund": value,
-                    "nav": currData['curr_price'],
-                    "return_one_year": performace['one_year'],
-                    "return_five_year": performace['five_year']
-                })
-    elif isinstance(data, list):
-        for item in data[skip:limit]:
-            traverse_mutual_fund_all(item)
-    return refinedArray
 
 # Get All Mutual Fund
 def all_mutual_fund(skip: int, limit: int):
     with open('./data/code.json') as file:
         json_data = json.load(file)
     
-    arr = traverse_mutual_fund_all(json_data, skip, limit)
+    arr=[]
+
+    for data in json_data[skip:limit]:
+        print(data)
+        for key, value in data.items():
+            performace = mutualFunds.get_performace(key+".BO")
+            currData=mutualFunds.get_curr_data(key+ ".BO")
+            arr.append({
+                "symbol": key,
+                "fund": value,
+                "nav": currData['curr_price'],
+                "return_one_year": performace['one_year'],
+                "return_five_year": performace['five_year']
+            })
     
-    return arr
+    return {
+        "data": arr,
+        "total": len(json_data)
+    }
 
 # Get UTI Mutual Fund
 def uti_mutual_fund(skip: int, limit: int):
