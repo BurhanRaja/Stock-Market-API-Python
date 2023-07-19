@@ -65,7 +65,11 @@ def best_bond_etf():
             "price_change": priceData['price_change'],
             "per_change": priceData['per_change']
         })
-    return data
+    return {
+                "data": data,
+                "total_pages": int(len(bondData) / 10),
+                "page_num": int(len(bondData) / 10)  
+            }
 
 def best_gold_etf():
     with open("./data/Best_Gold_ETF.json") as file:
@@ -82,7 +86,11 @@ def best_gold_etf():
             "price_change": priceData['price_change'],
             "per_change": priceData['per_change']
         })
-    return data
+    return {
+        "data": data,
+        "total_pages": int(len(goldData) / 10),
+                "page_num": int(len(goldData) / 10)  
+        }
 
 def best_index_etf():
     with open("./data/Best_Index_ETF.json") as file:
@@ -99,7 +107,11 @@ def best_index_etf():
             "price_change": priceData['price_change'],
             "per_change": priceData['per_change']
         })
-    return data
+    return {
+                    "data": data,
+        "total_pages": int(len(indexData) / 10),
+                "page_num": int(len(indexData) / 10)  
+            }
 
 def best_sector_etf():
     with open("./data/Best_Sector_ETF.json") as file:
@@ -116,8 +128,13 @@ def best_sector_etf():
             "price_change": priceData['price_change'],
             "per_change": priceData['per_change']
         })
-    return data
-
+    return {
+                "data": data,
+                "total_pages": int(len(sectorData) / 10),
+                "page_num": int(len(sectorData) / 10) 
+            }
+    
+    
 def etfCurrentPrice(symbol: str):
     data=etfs.get_curr_data(symbol)
     return data

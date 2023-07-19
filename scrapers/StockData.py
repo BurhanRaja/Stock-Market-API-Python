@@ -45,6 +45,7 @@ class STOCKMARKET:
         gainersData=[]
         for gainers in gainersTable[skip:limit]:
             g=gainers.find_all("td")[1:]
+            print(g[0].find("a").getText())
             gainersData.append({
                 "symbol": g[0].find("a").attrs["href"].split("/")[2],
                 "company": g[0].find("a").getText(),
