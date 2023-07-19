@@ -252,7 +252,7 @@ def read_mutual_fund_history(mf: str, start: str, end: str, interval: str):
 
 # Get Mutual Fund Details
 @app.get("/mutualfund/details/{mf}")
-def read_mutual_fund_history(mf: str):
+def read_mutual_fund_info(mf: str):
     data = mutualfund_info(mf)
     return data
 
