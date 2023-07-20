@@ -143,7 +143,7 @@ def read_navi_mf(skip: int=0, limit: int=10):
     return data
 
 # Get Motilal Mutual Fund
-@app.get("/mutualfund/moitilal")
+@app.get("/mutualfund/motilal")
 def read_moitilal_mf(skip: int=0, limit: int=10):
     data = moitilal_mutual_fund(skip, limit)
     return data
