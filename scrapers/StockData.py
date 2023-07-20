@@ -262,12 +262,8 @@ class STOCKMARKET:
                     "March 2022": re.sub(" +", " ", allCol[3].find("span").getText().replace("\n", "").replace("\r", "")),
                     "March 2023": re.sub(" +", " ", allCol[4].find("span").getText().replace("\n", "").replace("\r", ""))
                 })
-        balanceSheetTableData= {
-            "equityLiabilities": equityLiabilities,
-            "assets" : assets
-        }
         return {
-            "balanceSheet": balanceSheetTableData
+            "balanceSheet": equityLiabilities + assets
         }
 
     # Get Yearly Cash Flow
@@ -314,7 +310,8 @@ class STOCKMARKET:
                     "5 year": re.sub(" +", " ", ratiosYears[2].find(class_="durationvalue").getText().replace("\n", "").replace("\r", ""))
                 }
             else:
-                data=re.sub(" +", " ", ratios.find(class_="Number").getText().replace("\n", "").replace("\r", ""))
+                print(ratios)
+                data=re.sub(" +", " ", ratios.find(class_="h2").getText().replace("\n", "").replace("\r", ""))
             allRatios.append({
                 "name": name,
                 "data": data
