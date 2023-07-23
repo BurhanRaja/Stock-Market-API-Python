@@ -92,6 +92,11 @@ def read_income_statement(stock: str):
     stock_incomestatement = handle_stock_income_statement(stock)
     return stock_incomestatement
 
+@app.get("/stock")
+def read_search_stock(search: str):
+    search_result = handle_search_stock(search)
+    return search_result
+
 # -------------------------------- MUTUAL FUND ----------------------------------
 
 # Get All Mutual Fund
