@@ -27,8 +27,9 @@ class STOCKMARKET:
             curr_change=float(data.find(id="mainContent_pnlPriceChange").find(class_="text-success").find(class_="Number").getText())
             curr_per_change=float("0"+data.find(id="mainContent_pnlPriceChange").find_all(class_="text-success")[1].find(class_="Number").getText())
         else:
-            curr_change=float(data.find(id="mainContent_pnlPriceChange").find(class_="Number").getText())
-            curr_per_change=float(data.find(id="mainContent_pnlPriceChange").find(class_="Number").getText())
+            allChange=data.find(id="mainContent_pnlPriceChange").find_all(class_="Number")
+            curr_change=float(allChange[0].getText())
+            curr_per_change=float(allChange[1].getText())
         return {
             "name": name,
             "symbol": symbol,
@@ -124,6 +125,7 @@ class STOCKMARKET:
         print(full_name)
         priceData=html.find(id="mainContent_clsprice")
         curr_price=float(priceData.find(class_="currprice").find(class_="Number").getText())
+        
         changeData=priceData.find(id="mainContent_pnlPriceChange").getText()
         curr_change=float(changeData.split()[0].replace("+", ""))
         curr_per_change=float(changeData.split()[1].replace("(", "").replace(")", "").replace("%", ""))
