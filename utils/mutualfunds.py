@@ -1,5 +1,6 @@
 import json
 from scrapers.MutualFunds import MUTUALFUND
+import yfinance as yf
 
 mutualFunds = MUTUALFUND()
 
@@ -319,8 +320,11 @@ def best_tax_saver_mutual_fund(skip: int, limit: int):
 
 
 # Mutual Fund History
-def mutualfund_history(mf_id: str, start: str, end: str, interval: str):
-    data = mutualFunds.get_historical_data(mf_id + ".BO", start, end, interval)
+def mutualfund_history(mf_id: str, period: str, interval: str):
+    print(mf_id)
+    print(period)
+    print(interval)
+    data = json.loads(yf.Ticker(mf_id + ".BO").history(period, interval).to_json(orient="table"))['data']
     return data
 
 
@@ -339,3 +343,6 @@ def mutualfund_info(mf_id: str):
 def mutualFundCurrentPrice(symbol: str):
     data = mutualFunds.get_curr_data(symbol + ".BO")
     return data
+
+def handle_search_mutual_fund(search: str):
+    return

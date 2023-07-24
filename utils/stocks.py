@@ -114,4 +114,3 @@ def handle_search_stock(search: str):
         if search in sD['Company Name'] or search in sD['Company Name'].lower():
             searchedStock.append(sD)
     return searchedStock
-
