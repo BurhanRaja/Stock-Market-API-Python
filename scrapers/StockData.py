@@ -46,7 +46,6 @@ class STOCKMARKET:
         gainersData=[]
         for gainers in gainersTable[skip:limit]:
             g=gainers.find_all("td")[1:]
-            print(g[0].find("a").getText())
             gainersData.append({
                 "symbol": g[0].find("a").attrs["href"].split("/")[2],
                 "company": g[0].find("a").getText(),
@@ -122,7 +121,6 @@ class STOCKMARKET:
         data=self.session.get("https://ticker.finology.in/company/"+symbol, headers=self.headers)
         html=BeautifulSoup(data.text, "html.parser")
         full_name=html.find(id="mainContent_ltrlCompName").getText()
-        print(full_name)
         priceData=html.find(id="mainContent_clsprice")
         curr_price=float(priceData.find(class_="currprice").find(class_="Number").getText())
         
@@ -312,7 +310,6 @@ class STOCKMARKET:
                     "5 year": re.sub(" +", " ", ratiosYears[2].find(class_="durationvalue").getText().replace("\n", "").replace("\r", ""))
                 }
             else:
-                print(ratios)
                 data=re.sub(" +", " ", ratios.find(class_="h2").getText().replace("\n", "").replace("\r", ""))
             allRatios.append({
                 "name": name,
