@@ -104,3 +104,14 @@ def handle_top_stock(skip=0, limit=5):
     top_losers = stockMarket.get_market_losers(skip, limit)
 
     return {"gainers": top_gainers, "losers": top_losers}
+
+def handle_search_stock(search: str):
+    with open("./data/NSE_Stocks.json", "r") as nseFile:
+        data = json.load(nseFile)
+    
+    searchedStock = []  
+    for sD in data:
+        if search in sD['Company Name'] or search in sD['Company Name'].lower():
+            searchedStock.append(sD)
+    return searchedStock
+
