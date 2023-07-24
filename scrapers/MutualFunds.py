@@ -149,7 +149,7 @@ class MUTUALFUND:
             + interval
             + "&filter=history&frequency="
             + interval
-            + "1d&includeAdjustedClose=true",
+            + "&includeAdjustedClose=true",
             headers=self.headers,
         )
         html = BeautifulSoup(data.text, "html.parser")
@@ -166,18 +166,15 @@ class MUTUALFUND:
             date = history.find(class_="Py(10px) Ta(start) Pend(10px)").getText()
             tds = history.find_all(class_="Py(10px) Pstart(10px)")
 
-            historyData.append(
-                {
-                    "date": date,
-                    "open": tds[0].getText(),
-                    "high": tds[1].getText(),
-                    "low": tds[2].getText(),
-                    "close": tds[3].getText(),
-                    "adjClose": tds[4].getText(),
-                }
-            )
+            if tds[0].getText() != "-":
+                historyData.append(
+                    {
+                        "date": date,
+                        "price": tds[0].getText(),
+                    }
+                )
 
         return historyData
 
 
-MUTUALFUND().get_historical_data("0P0001IUCE.BO", "1672531200", "1689465600", "1d")
+# MUTUALFUND().get_historical_data("0P0001IUCE.BO", "1672531200", "1689465600", "1d")
