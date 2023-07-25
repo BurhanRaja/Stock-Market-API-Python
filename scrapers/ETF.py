@@ -13,11 +13,14 @@ class ETF:
         data=self.session.get("https://finance.yahoo.com/quote/"+symbol, headers=self.headers)
         html=BeautifulSoup(data.text, "html.parser")
         
+        name = html.find(class_="D(ib) Fz(18px)").getText()
         price=float(html.find(class_="Fw(b) Fz(36px) Mb(-4px) D(ib)").getText().replace(",", ""))
         price_change=float(html.find(class_="Fw(500) Pstart(8px) Fz(24px)").find("span").getText().replace("+", ""))
         per_change=float(html.find_all(class_="Fw(500) Pstart(8px) Fz(24px)")[1].find("span").getText().replace("(", "").replace(")", "").replace("+", "").replace("%", ""))
 
         return {
+            "name": name,
+            "symbol": symbol,
             "curr_price": price,
             "price_change": price_change,
             "per_change": per_change,

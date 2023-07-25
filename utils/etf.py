@@ -157,12 +157,10 @@ def etfDetails(symbol: str):
 
     return {
         "info": info,
-        "price": priceData["curr_price"],
-        "price_change": priceData["price_change"],
-        "per_change": priceData["per_change"],
+        "priceData": priceData
     }
 
 
-def etfHistoricalData(symbol: str, start: str, end: str, interval: str):
-    historical_data = etfs.get_historical_data(symbol, start, end, interval)
+def etfHistoricalData(symbol: str, period: str, interval: str):
+    historical_data = json.loads(yf.Ticker(symbol).history(period, interval).to_json(orient="table"))['data']
     return historical_data

@@ -310,6 +310,6 @@ def read_etf_details(symbol: str):
     return data
 
 @app.get("/etf/historical-data/{symbol}")
-def read_etf_historical_data(symbol: str, start: str, end: str, interval: str):
-    data = etfHistoricalData(symbol, start, end, interval)
+def read_etf_historical_data(symbol: str, period: str, interval: str):
+    data = etfHistoricalData(symbol, period, interval)
     return data
