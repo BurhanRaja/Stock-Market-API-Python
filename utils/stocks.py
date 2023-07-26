@@ -1,9 +1,5 @@
 import yfinance as yf
-import pandas as pd
 import json
-from yahooquery import Ticker
-from pprint import pprint
-from yahoofinancials import YahooFinancials
 from nsepython import *
 from scrapers.StockData import STOCKMARKET
 

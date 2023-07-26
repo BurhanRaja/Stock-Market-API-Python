@@ -4,6 +4,7 @@ import pandas as pd
 import pprint
 import re
 
+
 class STOCKMARKET:
     def __init__(self):
         self.headers = {
@@ -14,7 +15,7 @@ class STOCKMARKET:
     # Get Index Data
     def get_index_data(self, urlStr: str, symbol: str):
         data=self.session.get("https://ticker.finology.in/market/index/"+urlStr, headers=self.headers)
-        html=BeautifulSoup(data.text, "html.parser")
+        html=BeautifulSoup(data.text, "lxml")
         # Get Name
         name=html.find("h1").getText()
         # Get Data
@@ -41,7 +42,7 @@ class STOCKMARKET:
     # Get Market Gainers
     def get_market_gainers(self, skip: int, limit: int):
         data=self.session.get("https://ticker.finology.in/market/top-gainers", headers=self.headers)
-        html=BeautifulSoup(data.text, "html.parser")
+        html=BeautifulSoup(data.text, "lxml")
         gainersTable=html.find(id="mainContent_pnlhighlow").find("tbody").find_all("tr")
         gainersData=[]
         for gainers in gainersTable[skip:limit]:
@@ -57,7 +58,7 @@ class STOCKMARKET:
     # Get Market Losers
     def get_market_losers(self, skip: int, limit: int):
         data=self.session.get("https://ticker.finology.in/market/top-losers", headers=self.headers)
-        html=BeautifulSoup(data.text, "html.parser")
+        html=BeautifulSoup(data.text, "lxml")
         losersTable=html.find(id="mainContent_pnlhighlow").find("tbody").find_all("tr")
         losersData=[]
         for losers in losersTable[skip:limit]:
@@ -73,7 +74,7 @@ class STOCKMARKET:
     # Index Details
     def get_index_details(self, urlStr: str):
         data=self.session.get("https://ticker.finology.in/market/index/"+urlStr, headers=self.headers)
-        html=BeautifulSoup(data.text, "html.parser")
+        html=BeautifulSoup(data.text, "lxml")
         
         gainersTable=html.find(id="pills-gainer").find("table").find("tbody").find_all("tr")
         losersTable=html.find(id="pills-loser").find("table").find("tbody").find_all("tr")
@@ -119,7 +120,7 @@ class STOCKMARKET:
     # Get Company Data
     def get_company_data(self, symbol: str):
         data=self.session.get("https://ticker.finology.in/company/"+symbol, headers=self.headers)
-        html=BeautifulSoup(data.text, "html.parser")
+        html=BeautifulSoup(data.text, "lxml")
         full_name=html.find(id="mainContent_ltrlCompName").getText()
         priceData=html.find(id="mainContent_clsprice")
         curr_price=float(priceData.find(class_="currprice").find(class_="Number").getText())
@@ -138,7 +139,7 @@ class STOCKMARKET:
     # Get Company Strengths Limitations
     def get_company_strengths_and_limitations(self, symbol: str):
         data=self.session.get("https://ticker.finology.in/company/"+symbol, headers=self.headers)
-        html=BeautifulSoup(data.text, "html.parser")
+        html=BeautifulSoup(data.text, "lxml")
         strengths=html.find(id="mainContent_ProsAndCons").find(class_="strength").find_all("li")
         strengthsData=[]
         for s in strengths:
@@ -157,7 +158,7 @@ class STOCKMARKET:
     # Get Company Price Summary
     def get_company_price_summary(self, symbol: str):
         data=self.session.get("https://ticker.finology.in/company/"+symbol, headers=self.headers)
-        html=BeautifulSoup(data.text, "html.parser")
+        html=BeautifulSoup(data.text, "lxml")
         priceData=html.find(id="mainContent_clsprice")
         curr_price=float(priceData.find(class_="currprice").find(class_="Number").getText())
         todaysHigh=float(html.find(id="mainContent_ltrlTodayHigh").getText())
@@ -175,7 +176,7 @@ class STOCKMARKET:
     # Get Company Essentials
     def get_company_essentials(self, symbol: str):
         data=self.session.get("https://ticker.finology.in/company/"+symbol, headers=self.headers)
-        html=BeautifulSoup(data.text, "html.parser")
+        html=BeautifulSoup(data.text, "lxml")
         companyData=html.find(id="mainContent_updAddRatios").find_all(class_="compess")[:-1]
         companyEssentials=[]
         for data in companyData:
@@ -190,7 +191,7 @@ class STOCKMARKET:
     # Get Quaterly Results
     def get_quaterly_results(self, symbol: str):
         data=self.session.get("https://ticker.finology.in/company/"+symbol, headers=self.headers)
-        html=BeautifulSoup(data.text, "html.parser")
+        html=BeautifulSoup(data.text, "lxml")
         quaterlyTable=html.find(id="mainContent_quarterly").find("table")
         tableBody=quaterlyTable.find("tbody").find_all("tr")
         quaterlyTableData=[]
@@ -212,7 +213,7 @@ class STOCKMARKET:
     # Get yearly Results 
     def get_yearly_results(self, symbol: str):
         data=self.session.get("https://ticker.finology.in/company/"+symbol, headers=self.headers)
-        html=BeautifulSoup(data.text, "html.parser")
+        html=BeautifulSoup(data.text, "lxml")
         yearlyTable=html.find(id="profit").find("table")
         tableBody=yearlyTable.find("tbody").find_all("tr")
         yearlyTableData=[]
@@ -234,7 +235,7 @@ class STOCKMARKET:
     # Get Yearly Balance Sheet
     def get_yearly_balance_sheet(self, symbol: str):
         data=self.session.get("https://ticker.finology.in/company/"+symbol, headers=self.headers)
-        html=BeautifulSoup(data.text, "html.parser")
+        html=BeautifulSoup(data.text, "lxml")
         balanceSheetTable=html.find(id="balance").find("table")
         tableBody=balanceSheetTable.find("tbody").find_all("tr")
         equityLiabilities=[]
@@ -269,7 +270,7 @@ class STOCKMARKET:
     # Get Yearly Cash Flow
     def get_yearly_cash_flow(self, symbol: str):
         data=self.session.get("https://ticker.finology.in/company/"+symbol, headers=self.headers)
-        html=BeautifulSoup(data.text, "html.parser")
+        html=BeautifulSoup(data.text, "lxml")
         if (html.find(id="mainContent_cashflows") == None):
             return {
                 "cashflow": []
@@ -296,7 +297,7 @@ class STOCKMARKET:
     # Get All Ratios
     def get_financial_ratios(self, symbol: str):
         data=self.session.get("https://ticker.finology.in/company/"+symbol, headers=self.headers)
-        html=BeautifulSoup(data.text, "html.parser")
+        html=BeautifulSoup(data.text, "lxml")
         ratiosData=html.find(id="ratios").find_all(class_="col-12")
         allRatios=[]
         for ratios in ratiosData:
