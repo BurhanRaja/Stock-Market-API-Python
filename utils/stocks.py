@@ -1,6 +1,5 @@
 import yfinance as yf
 import json
-from nsepython import *
 from scrapers.StockData import STOCKMARKET
 
 
