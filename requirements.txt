@@ -1,4 +1,6 @@
 anyio
+asyncio
+aiohttp
 appdirs
 beautifulsoup4
 bs4
