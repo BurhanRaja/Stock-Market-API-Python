@@ -42,7 +42,7 @@ def read_stock_index(skip: int=0, limit: int=5):
 # ALl Stocks NSE or BSE
 @app.get("/all/stocks/{exchange}")
 def read_stocks(exchange: str, skip: int = 0, limit: int = 10):
-    stocklist = handle_stock_list(exchange, skip, limit)
+    stocklist = asyncio.run(handle_stock_list(exchange, skip, limit))
     return stocklist
 
 # Stock Current Price
@@ -102,7 +102,7 @@ def read_search_stock(search: str):
 # Get All Mutual Fund
 @app.get("/mutualfund/all")
 def read_all_mf(skip: int=0, limit: int=10):
-    data = all_mutual_fund(skip, limit)
+    data = asyncio.run(all_mutual_fund(skip, limit))
     return data
 
 # Get UTI Mutual Fund
@@ -275,8 +275,8 @@ def read_search_mutual_funds(search: str):
 # ------------------------------------------ ETFs ---------------------------------------------
 
 @app.get("/all/etfs")
-def read_etfs(skip: int = 1, limit: int = 6):
-    data = all_etfs(skip, limit)
+def read_etfs(skip: int = 1, limit: int = 10):
+    data = asyncio.run(all_etfs(skip, limit))
     return data
 
 @app.get("/etfs/{etf}")

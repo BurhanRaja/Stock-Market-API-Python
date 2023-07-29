@@ -2,34 +2,22 @@ import json
 from yahooquery import Ticker
 import yfinance as yf
 from scrapers.ETF import ETF
+import asyncio
+import aiohttp
+import math
 
 etfs = ETF()
 
-refinedArray = []
 
-
-def all_etfs(skip: int = 1, limit: int = 6):
+async def all_etfs(skip: int = 1, limit: int = 10):
     with open("./data/all_ETFs.json", "r") as write_file:
         objArr = json.load(write_file)
 
-    dataArr = []
-
     objArr = objArr[1:]
-
-    for ticker in objArr[skip:limit]:
-        symbol = ticker["1"] + ".NS"
-        data = etfs.get_curr_data(ticker["1"] + ".NS")
-        dataArr.append(
-            {
-                "name": ticker["0"],
-                "symbol": symbol,
-                "curr_price": data["curr_price"],
-                "curr_per_change": data["per_change"],
-                "curr_price_change": data["price_change"],
-            }
-        )
-
-    return {"data": dataArr, "total": len(dataArr)}
+    async with aiohttp.ClientSession() as session:
+        data=[etfs.get_curr_data(ticker["1"] + ".NS", session) for ticker in objArr[skip:limit]]
+        refinedData=await asyncio.gather(*data)
+        return {"data": refinedData, "total": math.floor((len(objArr) - limit)/10)}
 
 
 def singleETFs(symbol: str):

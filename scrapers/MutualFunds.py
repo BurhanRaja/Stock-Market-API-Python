@@ -8,6 +8,31 @@ class MUTUALFUND:
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36"
         }
         self.session = requests.Session()
+    
+    async def get_custom_data(self, symbol: str, session):
+        async with session.get("https://finance.yahoo.com/quote/" + symbol, headers=self.headers) as data1:
+            html1= BeautifulSoup(await data1.text(), "lxml")
+            name = html1.find(class_="D(ib) Fz(18px)").getText()
+            price = float(html1.find(class_="Fw(b) Fz(36px) Mb(-4px) D(ib)").getText().replace(",", ""))
+        
+        async with session.get("https://finance.yahoo.com/quote/" + symbol + "/performance?p=" + symbol, headers=self.headers) as data2:
+            html2= BeautifulSoup(await data2.text(), "lxml")
+            returnsTable = html2.find(
+                class_="Pb(20px) smartphone_Px(20px) smartphone_Pt(20px)"
+            ).find_all(class_="Mb(25px)")[1]
+            all_returns = returnsTable.find_all(
+                class_="Bdbw(1px) Bdbc($seperatorColor) Bdbs(s) H(25px) Pt(10px)"
+            )
+            one_year = all_returns[3].find(class_="W(20%)").getText().replace("%", "")
+            five_year = all_returns[5].find(class_="W(20%)").getText().replace("%", "")
+        
+        return {
+            "symbol": symbol,
+            "fund": name,
+            "nav": price,
+            "return_one_year": one_year,
+            "return_five_year": five_year,
+        }
 
     def get_curr_data(self, symbol: str):
         data = self.session.get(

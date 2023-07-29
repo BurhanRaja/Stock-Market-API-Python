@@ -1,29 +1,29 @@
 import yfinance as yf
 import json
 from scrapers.StockData import STOCKMARKET
-
+import asyncio
+import aiohttp
 
 stockMarket = STOCKMARKET()
 
 
 # Stock List
-def handle_stock_list(exchange: str, offset: int, limit: int):
+async def handle_stock_list(exchange: str, offset: int, limit: int):
     if exchange == "NSE":
         with open("./data/NSE_Stocks.json", "r") as file:
             objArr = json.load(file)
-        refinedData = []
-        for el in objArr[offset:limit]:
-            data = stockMarket.get_company_data(el["Symbol"])
-            refinedData.append(data)
-        return refinedData
+            
+        async with aiohttp.ClientSession() as session:
+            testData = [stockMarket.get_company_data(el["Symbol"], session) for el in objArr[offset:limit]]
+            refinedData = await asyncio.gather(*testData)
+            return refinedData
     else:
         with open("./data/BSE_Stocks.json", "r") as file:
             objArr = json.load(file)
-        refinedData = []
-        for el in objArr[offset:limit]:
-            data = stockMarket.get_company_data(el["Symbol"])
-            refinedData.append(data)
-        return refinedData
+        async with aiohttp.ClientSession() as session:
+            testData = [stockMarket.get_company_data(el["Symbol"], session) for el in objArr[offset:limit]]
+            refinedData = await asyncio.gather(*testData)
+            return refinedData
 
 
 # Stock Financial Ratios

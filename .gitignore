@@ -1,5 +1,5 @@
 env/
-__pycache___/
-scrapers/__pycache___/
-utils/__pycache___/
+__pycache__
+scrapers/__pycache__
+utils/__pycache__
 .vscode/

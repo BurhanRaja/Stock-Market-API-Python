@@ -1,6 +1,9 @@
 import json
 from scrapers.MutualFunds import MUTUALFUND
 import yfinance as yf
+import asyncio
+import aiohttp
+import math
 
 mutualFunds = MUTUALFUND()
 
@@ -8,27 +11,19 @@ refinedArray = []
 
 
 # Get All Mutual Fund
-def all_mutual_fund(skip: int, limit: int):
+async def all_mutual_fund(skip: int, limit: int):
     with open("./data/code.json") as file:
         json_data = json.load(file)
 
     arr = []
-
-    for data in json_data[skip:limit]:
-        for key, value in data.items():
-            performace = mutualFunds.get_performace(key + ".BO")
-            currData = mutualFunds.get_curr_data(key + ".BO")
-            arr.append(
-                {
-                    "symbol": key,
-                    "fund": value,
-                    "nav": currData["curr_price"],
-                    "return_one_year": performace[3]["value"],
-                    "return_five_year": performace[5]["value"],
-                }
-            )
-
-    return {"data": arr, "total": len(json_data)}
+    
+    async with aiohttp.ClientSession() as session:
+        tasks = [mutualFunds.get_custom_data(key + ".BO", session) for data in json_data[skip:limit] for key, value in data.items()]
+        refinedData = await asyncio.gather(*tasks)
+        return {
+            "data": refinedData,
+            "total": math.floor((len(json_data) - limit)/10)
+        }
 
 
 # Get UTI Mutual Fund
