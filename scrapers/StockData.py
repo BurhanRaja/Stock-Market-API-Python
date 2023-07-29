@@ -1,7 +1,5 @@
 import requests
 from bs4 import BeautifulSoup
-import pandas as pd
-import pprint
 import re
 
 
@@ -16,7 +14,6 @@ class STOCKMARKET:
     def get_index_data(self, urlStr: str, symbol: str):
         data=self.session.get("https://ticker.finology.in/market/index/"+urlStr, headers=self.headers)
         html=BeautifulSoup(data.text, "lxml")
-        print(html)
         # Get Name
         name=html.find("h1").getText()
         # Get Data

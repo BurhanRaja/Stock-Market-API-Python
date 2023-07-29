@@ -164,3 +164,15 @@ def etfDetails(symbol: str):
 def etfHistoricalData(symbol: str, period: str, interval: str):
     historical_data = json.loads(yf.Ticker(symbol).history(period, interval).to_json(orient="table"))['data']
     return historical_data
+
+def handle_search_etfs(search: str):
+    with open("./data/all_ETFs.json", "r") as etfFile:
+        data = json.load(etfFile)
+    searchedETF = []  
+    for etfD in data[1:]:
+        if search in etfD['0'] or search in etfD['0'].lower():
+            searchedETF.append({
+                                "name": etfD['0'],
+                                "symbol": etfD['1']
+                                })
+    return searchedETF

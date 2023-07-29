@@ -103,9 +103,11 @@ def handle_top_stock(skip=0, limit=5):
 def handle_search_stock(search: str):
     with open("./data/NSE_Stocks.json", "r") as nseFile:
         data = json.load(nseFile)
-    
     searchedStock = []  
     for sD in data:
         if search in sD['Company Name'] or search in sD['Company Name'].lower():
-            searchedStock.append(sD)
+            searchedStock.append({
+                                  "name": sD['Company Name'],
+                                  "symbol": sD['Symbol']
+                                  })
     return searchedStock

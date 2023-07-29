@@ -321,9 +321,6 @@ def best_tax_saver_mutual_fund(skip: int, limit: int):
 
 # Mutual Fund History
 def mutualfund_history(mf_id: str, period: str, interval: str):
-    print(mf_id)
-    print(period)
-    print(interval)
     data = json.loads(yf.Ticker(mf_id + ".BO").history(period, interval).to_json(orient="table"))['data']
     return data
 
@@ -345,4 +342,14 @@ def mutualFundCurrentPrice(symbol: str):
     return data
 
 def handle_search_mutual_fund(search: str):
-    return
+    with open("./data/code.json", "r") as mfFile:
+        data = json.load(mfFile)
+    searchedMF = [] 
+    for mfD in data:
+        for key, value in mfD.items():
+            if search in value or search in value.lower():
+                searchedMF.append({
+                                    "symbol": key,
+                                    "name": value
+                                })
+    return searchedMF

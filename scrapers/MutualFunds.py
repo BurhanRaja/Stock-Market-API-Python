@@ -37,6 +37,7 @@ class MUTUALFUND:
 
         return {
             "name": name,
+            "symbol": symbol,
             "curr_price": price,
             "price_change": price_change,
             "per_change": per_change,
@@ -48,8 +49,6 @@ class MUTUALFUND:
             headers=self.headers,
         )
         html = BeautifulSoup(data.text, "html.parser")
-
-        # print(html.find(class_="Pb(20px) smartphone_Px(20px) smartphone_Pt(20px)"))
 
         returnsTable = html.find(
             class_="Pb(20px) smartphone_Px(20px) smartphone_Pt(20px)"
@@ -138,12 +137,7 @@ class MUTUALFUND:
         }
 
     def get_historical_data(self, symbol: str, start: str, end: str, interval: str):
-        # print(start)
-        # print(end)
-        
         url="https://finance.yahoo.com/quote/"+ symbol + "/history?period1=" + start + "&period2=" + end + "&interval=" + interval + "&filter=history&frequency=" + interval + "&includeAdjustedClose=false"
-        
-        print(url)
         
         data = self.session.get(
             "https://finance.yahoo.com/quote/"

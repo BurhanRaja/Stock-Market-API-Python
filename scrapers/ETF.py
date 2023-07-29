@@ -66,5 +66,3 @@ class ETF:
             })
 
         return historyData
-
-# print(ETF().get_curr_data("AXISGOLD.NS"))

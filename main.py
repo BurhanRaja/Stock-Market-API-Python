@@ -267,6 +267,11 @@ def read_mutual_fund_price(symbol: str):
     data = mutualFundCurrentPrice(symbol)
     return data
 
+@app.get("/mutual-fund")
+def read_search_mutual_funds(search: str):
+    search_result = handle_search_mutual_fund(search)
+    return search_result
+
 # ------------------------------------------ ETFs ---------------------------------------------
 
 @app.get("/all/etfs")
@@ -313,3 +318,8 @@ def read_etf_details(symbol: str):
 def read_etf_historical_data(symbol: str, period: str, interval: str):
     data = etfHistoricalData(symbol, period, interval)
     return data
+
+@app.get("/etf")
+def read_search_etfs(search: str):
+    search_result = handle_search_etfs(search)
+    return search_result
