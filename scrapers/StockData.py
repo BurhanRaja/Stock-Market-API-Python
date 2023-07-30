@@ -320,6 +320,7 @@ class STOCKMARKET:
             name=re.sub(" +", " ", ratios.find(class_="card").find("h4").getText().replace("\n", "").replace("\r", ""))
             ratiosYears = ratios.find_all(class_="ratiosingle")
             data=""
+            
             if (len(ratiosYears) > 0):
                 data={
                     "1 year": re.sub(" +", " ", ratiosYears[0].find(class_="durationvalue").getText().replace("\n", "").replace("\r", "")),
@@ -327,7 +328,8 @@ class STOCKMARKET:
                     "5 year": re.sub(" +", " ", ratiosYears[2].find(class_="durationvalue").getText().replace("\n", "").replace("\r", ""))
                 }
             else:
-                data=re.sub(" +", " ", ratios.find(class_="h2").getText().replace("\n", "").replace("\r", ""))
+                print(ratios)
+                data=re.sub(" +", " ", ratios.find(class_="Number").getText().replace("\n", "").replace("\r", ""))
             allRatios.append({
                 "name": name,
                 "data": data
