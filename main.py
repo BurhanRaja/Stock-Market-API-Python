@@ -293,6 +293,24 @@ def read_search_mutual_funds(search: str):
     search_result = handle_search_mutual_fund(search)
     return search_result
 
+# async def request_mf_func(url, session):
+#     async with session.get(url) as data:
+#         return await data.json()
+
+# @app.get("/mf/details/all/{symbol}")
+# async def read_mf_details(symbol: str):
+#     urls=[
+#         "https://stock-market-api-3wxl.onrender.com/stock/income/statement/"+symbol,
+#         "https://stock-market-api-3wxl.onrender.com/stock/balancesheet/"+symbol,
+#         "https://stock-market-api-3wxl.onrender.com/stock/cash/flow/"+symbol,
+#         "https://stock-market-api-3wxl.onrender.com/mutualfund/current/price/"+symbol,
+#     ]
+    
+#     async with aiohttp.ClientSession() as session:
+#         data = [request_func(url, session) for url in urls]
+#         refinedData=await asyncio.gather(*data)
+#         return refinedData
+
 # ------------------------------------------ ETFs ---------------------------------------------
 
 @app.get("/all/etfs")

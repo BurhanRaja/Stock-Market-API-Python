@@ -94,6 +94,7 @@ class MUTUALFUND:
             "price_change": price_change,
             "per_change": per_change,
         }
+    
 
     def get_performace(self, symbol: str):
         data = self.session.get(

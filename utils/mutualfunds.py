@@ -322,6 +322,7 @@ def mutualfund_history(mf_id: str, period: str, interval: str):
 
 # Mutual Fund Details
 def mutualfund_info(mf_id: str):
+    
     info_data = mutualFunds.get_curr_data(mf_id + ".BO")
     performance = mutualFunds.get_performace(mf_id + ".BO")
     holdingInfo = mutualFunds.get_holdings_data(mf_id + ".BO")
@@ -333,7 +334,7 @@ def mutualfund_info(mf_id: str):
 
 
 def mutualFundCurrentPrice(symbol: str):
-    data = mutualFunds.get_mf_data(symbol + ".BO")
+    data = mutualFunds.get_curr_data(symbol + ".BO")
     return data
 
 def handle_search_mutual_fund(search: str):
