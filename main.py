@@ -97,6 +97,27 @@ def read_search_stock(search: str):
     search_result = handle_search_stock(search)
     return search_result
 
+async def request_func(url, session):
+    async with session.get(url) as data:
+        return await data.json()
+
+@app.get("/stock/details/all/{symbol}")
+async def read_stock_details(symbol: str):
+    urls=[
+        "https://stock-market-api-3wxl.onrender.com//stock/income/statement/"+symbol,
+        "https://stock-market-api-3wxl.onrender.com//stock/balancesheet/"+symbol,
+        "https://stock-market-api-3wxl.onrender.com//stock/cash/flow/"+symbol,
+        "https://stock-market-api-3wxl.onrender.com//stocks/suggestion/"+symbol,
+        "https://stock-market-api-3wxl.onrender.com//stock/info/"+symbol,
+        "https://stock-market-api-3wxl.onrender.com//stock/currentprice/"+symbol,
+        "https://stock-market-api-3wxl.onrender.com//stock/financial/ratios/"+symbol,
+    ]
+    
+    async with aiohttp.ClientSession() as session:
+        data = [request_func(url, session) for url in urls]
+        refinedData=await asyncio.gather(*data)
+        return refinedData
+
 # -------------------------------- MUTUAL FUND ----------------------------------
 
 # Get All Mutual Fund
