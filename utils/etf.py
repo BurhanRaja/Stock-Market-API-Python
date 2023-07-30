@@ -41,7 +41,7 @@ async def best_bond_etf():
     with open("./data/Best_Bond_ETF.json") as file:
         bondData = json.load(file)
     async with aiohttp.ClientSession() as session:
-        data=[etfs.get_curr_data(ticker["1"] + ".NS", session) for ticker in bondData]
+        data=[etfs.get_curr_data(ticker["symbol"], session) for ticker in bondData]
         refinedData=await asyncio.gather(*data)
         return {"data": refinedData, "total_pages": int(len(bondData)/10), "page_num": int(len(bondData) / 10)}
 
@@ -50,7 +50,7 @@ async def best_gold_etf():
     with open("./data/Best_Gold_ETF.json") as file:
         goldData = json.load(file)
     async with aiohttp.ClientSession() as session:
-        data=[etfs.get_curr_data(ticker["1"] + ".NS", session) for ticker in goldData]
+        data=[etfs.get_curr_data(ticker["symbol"], session) for ticker in goldData]
         refinedData=await asyncio.gather(*data)
         return {"data": refinedData, "total_pages": int(len(goldData)/10), "page_num": int(len(goldData) / 10)}
 
@@ -59,7 +59,7 @@ async def best_index_etf():
     with open("./data/Best_Index_ETF.json") as file:
         indexData = json.load(file)
     async with aiohttp.ClientSession() as session:
-        data=[etfs.get_curr_data(ticker["1"] + ".NS", session) for ticker in indexData]
+        data=[etfs.get_curr_data(ticker["symbol"], session) for ticker in indexData]
         refinedData=await asyncio.gather(*data)
         return {"data": refinedData, "total_pages": int(len(indexData)/10), "page_num": int(len(indexData) / 10)}
 
@@ -68,7 +68,7 @@ async def best_sector_etf():
     with open("./data/Best_Sector_ETF.json") as file:
         sectorData = json.load(file)
     async with aiohttp.ClientSession() as session:
-        data=[etfs.get_curr_data(ticker["1"] + ".NS", session) for ticker in sectorData]
+        data=[etfs.get_curr_data(ticker["symbol"], session) for ticker in sectorData]
         refinedData=await asyncio.gather(*data)
         return {"data": refinedData, "total_pages": int(len(sectorData)/10), "page_num": int(len(sectorData) / 10)}
 
