@@ -67,7 +67,7 @@ def handle_stock_income_statement(symbol: str):
 
 # Stock Current Price
 def handle_stock_price(symbol: str):
-    stock = stockMarket.get_company_data(symbol)
+    stock = stockMarket.get_company_price_data(symbol)
     return stock
 
 

@@ -133,6 +133,24 @@ class STOCKMARKET:
                 "curr_change": curr_change,
                 "curr_per_change": curr_per_change
             }
+                
+    def get_company_price_data(self, symbol: str):
+            data=self.session.get("https://ticker.finology.in/company/"+symbol, headers=self.headers)
+            html=BeautifulSoup(data.text, "lxml")
+            full_name=html.find(id="mainContent_ltrlCompName").getText()
+            priceData=html.find(id="mainContent_clsprice")
+            curr_price=float(priceData.find(class_="currprice").find(class_="Number").getText())
+            
+            changeData=priceData.find(id="mainContent_pnlPriceChange").getText()
+            curr_change=float(changeData.split()[0].replace("+", ""))
+            curr_per_change=float(changeData.split()[1].replace("(", "").replace(")", "").replace("%", ""))
+            return {
+                "name": full_name,
+                "symbol": symbol,
+                "curr_price": curr_price,
+                "curr_change": curr_change,
+                "curr_per_change": curr_per_change
+            } 
     
     # Get Company Strengths Limitations
     def get_company_strengths_and_limitations(self, symbol: str):

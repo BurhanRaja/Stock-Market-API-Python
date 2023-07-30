@@ -333,7 +333,7 @@ def mutualfund_info(mf_id: str):
 
 
 def mutualFundCurrentPrice(symbol: str):
-    data = mutualFunds.get_curr_data(symbol + ".BO")
+    data = mutualFunds.get_mf_data(symbol + ".BO")
     return data
 
 def handle_search_mutual_fund(search: str):
