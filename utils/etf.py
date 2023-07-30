@@ -21,11 +21,11 @@ async def all_etfs(skip: int = 1, limit: int = 10):
 
 def singleETFs(symbol: str):
     data = yf.Ticker(symbol).info
-    priceData = etfs.get_curr_data(symbol)
+    priceData = etfs.get_etf_data(symbol)
 
     if ".NS" not in symbol:
         data = yf.Ticker(symbol + ".NS").info
-        priceData = etfs.get_curr_data(symbol + ".NS")
+        priceData = etfs.get_etf_data(symbol + ".NS")
 
     sData = {
         "price": priceData["curr_price"],
@@ -74,13 +74,13 @@ async def best_sector_etf():
 
 
 def etfCurrentPrice(symbol: str):
-    data = etfs.get_curr_data(symbol)
+    data = etfs.get_etf_data(symbol)
     return data
 
 
 def etfDetails(symbol: str):
     info = yf.Ticker(symbol).info
-    priceData = etfs.get_curr_data(symbol)
+    priceData = etfs.get_etf_data(symbol)
 
     return {
         "info": info,
