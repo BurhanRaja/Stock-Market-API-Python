@@ -41,8 +41,8 @@ def read_stock_index(skip: int=0, limit: int=5):
 
 # ALl Stocks NSE or BSE
 @app.get("/all/stocks/{exchange}")
-def read_stocks(exchange: str, skip: int = 0, limit: int = 10):
-    stocklist = asyncio.run(handle_stock_list(exchange, skip, limit))
+async def read_stocks(exchange: str, skip: int = 0, limit: int = 10):
+    stocklist = await handle_stock_list(exchange, skip, limit)
     return stocklist
 
 # Stock Current Price
@@ -122,8 +122,8 @@ async def read_stock_details(symbol: str):
 
 # Get All Mutual Fund
 @app.get("/mutualfund/all")
-def read_all_mf(skip: int=0, limit: int=10):
-    data = asyncio.run(all_mutual_fund(skip, limit))
+async def read_all_mf(skip: int=0, limit: int=10):
+    data = await all_mutual_fund(skip, limit)
     return data
 
 # Get UTI Mutual Fund
@@ -314,8 +314,8 @@ def read_search_mutual_funds(search: str):
 # ------------------------------------------ ETFs ---------------------------------------------
 
 @app.get("/all/etfs")
-def read_etfs(skip: int = 1, limit: int = 10):
-    data = asyncio.run(all_etfs(skip, limit))
+async def read_etfs(skip: int = 1, limit: int = 10):
+    data = await all_etfs(skip, limit)
     return data
 
 @app.get("/etfs/{etf}")
@@ -324,23 +324,23 @@ def read_single_etf(etf: str):
     return data
 
 @app.get("/etf/best-bond-etf")
-def read_best_bond_etf():
-    data = asyncio.run(best_bond_etf())
+async def read_best_bond_etf():
+    data = await best_bond_etf()
     return data
 
 @app.get("/etf/best-index-etf")
-def read_best_index_etf():
-    data = asyncio.run(best_index_etf())
+async def read_best_index_etf():
+    data = await best_index_etf()
     return data
 
 @app.get("/etf/best-gold-etf")
-def read_best_gold_etf():
-    data = asyncio.run(best_gold_etf())
+async def read_best_gold_etf():
+    data = await best_gold_etf()
     return data
 
 @app.get("/etf/best-sector-etf")
-def read_best_sector_etf():
-    data = asyncio.run(best_sector_etf())
+async def read_best_sector_etf():
+    data = await best_sector_etf()
     return data
 
 @app.get("/etf/current/price/{symbol}")
