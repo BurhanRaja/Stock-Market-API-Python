@@ -286,22 +286,22 @@ def read_single_etf(etf: str):
 
 @app.get("/etf/best-bond-etf")
 def read_best_bond_etf():
-    data = best_bond_etf()
+    data = asyncio.run(best_bond_etf())
     return data
 
 @app.get("/etf/best-index-etf")
 def read_best_index_etf():
-    data = best_index_etf()
+    data = asyncio.run(best_index_etf())
     return data
 
 @app.get("/etf/best-gold-etf")
 def read_best_gold_etf():
-    data = best_gold_etf()
+    data = asyncio.run(best_gold_etf())
     return data
 
 @app.get("/etf/best-sector-etf")
 def read_best_sector_etf():
-    data = best_sector_etf()
+    data = asyncio.run(best_sector_etf())
     return data
 
 @app.get("/etf/current/price/{symbol}")
