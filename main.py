@@ -3,6 +3,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from utils.stocks import *
 from utils.mutualfunds import *
 from utils.etf import *
+# import os
+# from dotenv import load_dotenv
 
 app = FastAPI()
 
@@ -15,6 +17,17 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+# Get the path to the directory this file is in
+# BASEDIR = os.path.abspath(os.path.dirname(__file__))
+
+# # Connect the path with your '.env' file name
+# load_dotenv(os.path.join(BASEDIR, 'config.env'))
+
+# test_var = os.getenv("TEST_VAR")
+
+# print(test_var)
 
 @app.get("/")
 def read_root():
